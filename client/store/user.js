@@ -56,6 +56,11 @@ export const logout = () => async dispatch => {
   }
 }
 
+export const updateUser = user => async dispatch => {
+  const currentUser = await axios.put(`/api/users/${user.userId}/profile`, user)
+  dispatch(getUser(currentUser.data))
+}
+
 /**
  * REDUCER
  */
