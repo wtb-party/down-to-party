@@ -1,7 +1,11 @@
 import React from 'react'
 import {updateUser} from '../../store/user'
+import {fetchAllSkills} from '../../store/skill'
 import {connect} from 'react-redux'
 import {withRouter} from 'react-router'
+import Form from 'react-bootstrap/Form'
+import Button from 'react-bootstrap/Button'
+import Container from 'react-bootstrap/Container'
 
 class UserForm extends React.Component {
   constructor(props) {
@@ -15,6 +19,11 @@ class UserForm extends React.Component {
     this.handleChange = this.handleChange.bind(this)
   }
 
+
+  componentDidMount() {
+    this.props.fetchAllSkills()
+  }
+
   handleSubmit(evt) {
     evt.preventDefault()
     this.props.updateUserStore({...this.state, userId: this.props.userId})
@@ -23,33 +32,57 @@ class UserForm extends React.Component {
 
   handleChange(evt) {
     evt.preventDefault()
-    this.setState({[evt.target.name]: evt.target.value})
+    this.setState({[evt.target.id]: evt.target.value})
   }
 
   render() {
+    const {skills} = this.props
+    const {location} = this.state
+    console.log(this.state)
     return (
-      <div>
-        <form onSubmit={this.handleSubmit}>
-          <div>
-            <label htmlFor="location">location</label>
-            <input
-              name="location"
+      <Container>
+        <Form onSubmit={this.handleSubmit}>
+          <Form.Group controlId="location">
+            <Form.Label>Location</Form.Label>
+            <Form.Control
               type="text"
+              placeholder={location ? location : 'Chicago'}
               onChange={this.handleChange}
               value={this.state.location}
             />
-          </div>
-          <button type="submit">Update</button>
-        </form>
-      </div>
+          </Form.Group>
+          <Form.Group controlId="userSkills">
+            <Form.Label>Skills</Form.Label>
+            <Form.Control as="select" onChange={this.handleChange}>
+              {skills && skills.length ? (
+                skills.map(skill => (
+                  <option key={skill.id}>{skill.title}</option>
+                ))
+              ) : (
+                <option>loading</option>
+              )}
+            </Form.Control>
+          </Form.Group>
+          <Button variant="primary" type="submit">
+            Submit
+          </Button>
+        </Form>
+      </Container>
     )
+  }
+}
+
+const mapState = state => {
+  return {
+    skills: state.skills
   }
 }
 
 const mapDispatch = dispatch => {
   return {
-    updateUserStore: (user, userId) => dispatch(updateUser(user, userId))
+    updateUserStore: (user, userId) => dispatch(updateUser(user, userId)),
+    fetchAllSkills: () => dispatch(fetchAllSkills())
   }
 }
 
-export default withRouter(connect(null, mapDispatch)(UserForm))
+export default withRouter(connect(mapState, mapDispatch)(UserForm))

@@ -2,6 +2,17 @@ const router = require('express').Router()
 const {User, Skill} = require('../db/models')
 module.exports = router
 
+router.get('/:id/profile', async (req, res, next) => {
+  try {
+    const profile = await User.findByPk(req.params.id, {
+      include: {model: Skill}
+    })
+    res.status(200).json(profile)
+  } catch (e) {
+    next(e)
+  }
+})
+
 router.put('/:id/profile', async (req, res, next) => {
   try {
     delete req.body.userId
