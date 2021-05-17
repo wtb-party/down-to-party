@@ -15,7 +15,20 @@ nav a {
   margin: 1em;
 }
 
-form div {
-  margin: 1em;
-  display: inline-block;
+.auth-container {
+  margin-top: 50px;
+}
+
+.auth-form {
+  position: relative;
+  padding: 2rem;
+  border: 2px solid #ececec;
+  border-radius: 6px;
+  margin: 0 auto;
+  color: #212529;
+}
+
+.center {
+  position: relative;
+  margin: 0 auto;
 }

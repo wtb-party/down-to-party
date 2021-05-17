@@ -19,7 +19,6 @@ class UserForm extends React.Component {
     this.handleChange = this.handleChange.bind(this)
   }
 
-
   componentDidMount() {
     this.props.fetchAllSkills()
   }
@@ -38,10 +37,9 @@ class UserForm extends React.Component {
   render() {
     const {skills} = this.props
     const {location} = this.state
-    console.log(this.state)
     return (
-      <Container>
-        <Form onSubmit={this.handleSubmit}>
+      <Container className="auth-container">
+        <Form onSubmit={this.handleSubmit} className="auth-form w-50 p-3">
           <Form.Group controlId="location">
             <Form.Label>Location</Form.Label>
             <Form.Control

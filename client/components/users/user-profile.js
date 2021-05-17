@@ -7,7 +7,9 @@ export const UserProfile = props => {
 
   return (
     <>
-      <div>Edit your profile:</div>
+      <div className="text-center">
+        <h3>Edit your profile</h3>
+      </div>
       <UserForm
         userId={userId}
         userLocation={userLocation}
