@@ -61,6 +61,11 @@ export const updateUser = user => async dispatch => {
   dispatch(getUser(currentUser.data))
 }
 
+export const getCurrentUser = id => async dispatch => {
+  const currentUser = await axios.get(`/api/users/${id}/profile`)
+  dispatch(getUser(currentUser.data))
+}
+
 /**
  * REDUCER
  */
