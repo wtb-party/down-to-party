@@ -13,8 +13,16 @@ async function seed() {
   ])
 
   const skills = await Promise.all([
+    Skill.create({title: 'Bartender'}),
     Skill.create({title: 'Chef'}),
-    Skill.create({title: 'Bartender'})
+    Skill.create({title: 'Coordinator'}),
+    Skill.create({title: 'Dancer'}),
+    Skill.create({title: 'Decorations'}),
+    Skill.create({title: 'DJ'}),
+    Skill.create({title: 'Lighting'}),
+    Skill.create({title: 'Magician'}),
+    Skill.create({title: 'MC'}),
+    Skill.create({title: 'Server'})
   ])
 
   const events = await Promise.all([Event.create({location: 'Chicago'})])

@@ -7,16 +7,20 @@ import Form from 'react-bootstrap/Form'
 import Button from 'react-bootstrap/Button'
 import Container from 'react-bootstrap/Container'
 
+import SkillsSelect from '../skills/skills-select'
+
 class UserForm extends React.Component {
   constructor(props) {
     super(props)
     this.state = {
       email: this.props.email,
-      location: this.props.userLocation ? this.props.userLocation : ''
+      location: this.props.userLocation ? this.props.userLocation : '',
+      selection: ''
     }
 
     this.handleSubmit = this.handleSubmit.bind(this)
     this.handleChange = this.handleChange.bind(this)
+    this.handleSelection = this.handleSelection.bind(this)
   }
 
   componentDidMount() {
@@ -34,6 +38,10 @@ class UserForm extends React.Component {
     this.setState({[evt.target.id]: evt.target.value})
   }
 
+  handleSelection(evt) {
+    this.setState({selection: evt.target.value})
+  }
+
   render() {
     const {skills} = this.props
     const {location} = this.state
@@ -49,18 +57,10 @@ class UserForm extends React.Component {
               value={this.state.location}
             />
           </Form.Group>
-          <Form.Group controlId="userSkills">
-            <Form.Label>Skills</Form.Label>
-            <Form.Control as="select" onChange={this.handleChange}>
-              {skills && skills.length ? (
-                skills.map(skill => (
-                  <option key={skill.id}>{skill.title}</option>
-                ))
-              ) : (
-                <option>loading</option>
-              )}
-            </Form.Control>
-          </Form.Group>
+          <SkillsSelect
+            skills={skills}
+            handleSelection={this.handleSelection}
+          />
           <Button variant="primary" type="submit">
             Submit
           </Button>
