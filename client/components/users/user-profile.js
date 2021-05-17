@@ -3,6 +3,7 @@ import UserForm from './user-form'
 import {connect} from 'react-redux'
 
 export const UserProfile = props => {
+
   const {userId, email, userLocation, skills} = props
 
   return (
@@ -15,7 +16,6 @@ export const UserProfile = props => {
         skills={skills}
       />
     </>
-  )
 }
 
 const mapState = state => {
