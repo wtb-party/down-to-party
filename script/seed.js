@@ -12,18 +12,22 @@ async function seed() {
     User.create({email: 'murphy@email.com', password: '123'})
   ])
 
-  const events = await Promise.all([Event.create({location: 'Chicago'})])
-
   const skills = await Promise.all([
-    Skill.create({title: 'chef'}),
-    Skill.create({title: 'bartender'})
+    Skill.create({title: 'Chef'}),
+    Skill.create({title: 'Bartender'})
   ])
 
-  await users[0].addEvent(events[0])
+  const events = await Promise.all([Event.create({location: 'Chicago'})])
+  await events[0].setHost(users[0])
+  await events[0].addWorker(users[0], {through: {skillId: skills[0].id}})
+  await users[1].addJob(events[0], {through: {skillId: skills[1].id}})
+
   await users[0].addSkill(skills[1])
   await skills[0].addUser(users[0])
 
   console.log(`seeded ${users.length} users`)
+  console.log(`seeded ${skills.length} skills`)
+  console.log(`seeded ${events.length} events`)
   console.log(`seeded successfully`)
 }
 
