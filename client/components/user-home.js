@@ -3,6 +3,8 @@ import {Link} from 'react-router-dom'
 import {getCurrentUser} from '../store/user'
 import PropTypes from 'prop-types'
 import {connect} from 'react-redux'
+import Container from 'react-bootstrap/Container'
+import Card from 'react-bootstrap/Card'
 
 export class UserHome extends React.Component {
   componentDidMount() {
@@ -13,27 +15,31 @@ export class UserHome extends React.Component {
     const {email, location, userId, skills} = this.props
 
     return (
-      <div>
-        <h3>Welcome, {email}</h3>
-        {!location && (
-          <>
-            <p>
-              hey {email}, we noticed you haven't finished setting up your
-              account.
-            </p>
-            <Link to={`/users/${userId}/profile`}>
-              please complete your profile
-            </Link>
-          </>
-        )}
-        <div>this section shows all your events</div>
-        <div>this section is for creating events</div>
-        {skills ? (
-          skills.map(skill => <div key={skill.id}>{skill.title}</div>)
-        ) : (
-          <div>you haven't selected any skills</div>
-        )}
-      </div>
+      <Container>
+        <Card className="text-center center" style={{width: '32rem'}}>
+          <Card.Body>
+            <Card.Title>Welcome, {email}</Card.Title>
+            {!location && (
+              <>
+                <p>
+                  hey {email}, we noticed you haven't finished setting up your
+                  account.
+                </p>
+                <Link to={`/users/${userId}/profile`}>
+                  please complete your profile
+                </Link>
+              </>
+            )}
+            <div>this section shows all your events</div>
+            <div>this section is for creating events</div>
+            {skills ? (
+              skills.map(skill => <div key={skill.id}>{skill.title}</div>)
+            ) : (
+              <div>you haven't selected any skills</div>
+            )}
+          </Card.Body>
+        </Card>
+      </Container>
     )
   }
 }
