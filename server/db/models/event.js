@@ -6,7 +6,12 @@ const Event = db.define('event', {
     type: Sequelize.STRING
   },
   date: {
-    type: Sequelize.DATE
+    type: Sequelize.DATE,
+    defaultValue: Sequelize.NOW
+  },
+  public: {
+    type: Sequelize.BOOLEAN,
+    defaultValue: false
   }
 })
 

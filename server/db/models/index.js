@@ -4,34 +4,21 @@ const Skill = require('./skill')
 const Sequelize = require('sequelize')
 const db = require('../db')
 
-/**
- * If we had any associations to make, this would be a great place to put them!
- * ex. if we had another model called BlogPost, we might say:
- *
- *    BlogPost.belongsTo(User)
- */
-
-const UserSkills = db.define('userSkills', {
+const EventStaff = db.define('event_staff', {
   skillId: {
-    type: Sequelize.INTEGER
-  },
-  userId: {
     type: Sequelize.INTEGER
   }
 })
 
 User.hasMany(Event)
-Event.belongsTo(User)
+Event.belongsTo(User, {as: 'Host', foreignKey: 'userId'})
 
-Skill.belongsToMany(User, {through: UserSkills})
-User.belongsToMany(Skill, {through: UserSkills})
+User.belongsToMany(Event, {as: 'Jobs', through: EventStaff})
+Event.belongsToMany(User, {as: 'Workers', through: EventStaff})
 
-/**
- * We'll export all of our models here, so that any time a module needs a model,
- * we can just require it from 'db/models'
- * for example, we can say: const {User} = require('../db/models')
- * instead of: const User = require('../db/models/user')
- */
+Skill.belongsToMany(User, {through: 'user_skills'})
+User.belongsToMany(Skill, {through: 'user_skills'})
+
 module.exports = {
   User,
   Event,
