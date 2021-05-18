@@ -1,7 +1,7 @@
 'use strict'
 
 const db = require('../server/db')
-const {User, Event, Skill} = require('../server/db/models')
+const {User, Event, Skill, EventType} = require('../server/db/models')
 
 async function seed() {
   await db.sync({force: true})
@@ -10,6 +10,13 @@ async function seed() {
   const users = await Promise.all([
     User.create({email: 'cody@email.com', password: '123'}),
     User.create({email: 'murphy@email.com', password: '123'})
+  ])
+
+  const eventTypes = await Promise.all([
+    EventType.create({name: 'Birthday Party'}),
+    EventType.create({name: 'Cocktail Party'}),
+    EventType.create({name: 'Business Outing'}),
+    EventType.create({name: 'Housewarming Party'})
   ])
 
   const skills = await Promise.all([
@@ -25,17 +32,25 @@ async function seed() {
     Skill.create({title: 'Server'})
   ])
 
-  const events = await Promise.all([Event.create({location: 'Chicago'})])
+  const events = await Promise.all([
+    Event.create({location: 'Chicago'}),
+    Event.create({location: 'Texas'})
+  ])
   await events[0].setHost(users[0])
   await events[0].addWorker(users[0], {through: {skillId: skills[0].id}})
   await users[1].addJob(events[0], {through: {skillId: skills[1].id}})
-
+  await events[0].addService(skills[0])
+  await events[0].addService(skills[1])
+  await events[0].setEventType(eventTypes[0])
+  await events[1].setEventType(eventTypes[0])
+  await events[1].setHost(users[0])
   await users[0].addSkill(skills[1])
   await skills[0].addUser(users[0])
 
   console.log(`seeded ${users.length} users`)
   console.log(`seeded ${skills.length} skills`)
   console.log(`seeded ${events.length} events`)
+  console.log(`seeded ${eventTypes.length} eventTypes`)
   console.log(`seeded successfully`)
 }
 

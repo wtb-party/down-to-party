@@ -46,7 +46,7 @@ class UserForm extends React.Component {
     const {skills} = this.props
     const {location} = this.state
     return (
-      <Container className="auth-container">
+      <Container>
         <Form onSubmit={this.handleSubmit} className="auth-form w-50 p-3">
           <Form.Group controlId="location">
             <Form.Label>Location</Form.Label>

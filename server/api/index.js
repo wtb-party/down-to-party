@@ -3,6 +3,8 @@ module.exports = router
 
 router.use('/users', require('./users'))
 router.use('/skills', require('./skills'))
+router.use('/events', require('./events'))
+router.use('/eventTypes', require('./eventTypes'))
 
 router.use((req, res, next) => {
   const error = new Error('Not Found')
