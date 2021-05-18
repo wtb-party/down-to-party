@@ -6,6 +6,7 @@ import history from '../history'
  */
 const GET_USER = 'GET_USER'
 const REMOVE_USER = 'REMOVE_USER'
+const REMOVE_USER_SKILL = 'REMOVE_USER_SKILL'
 
 /**
  * INITIAL STATE
@@ -17,6 +18,7 @@ const defaultUser = {}
  */
 const getUser = user => ({type: GET_USER, user})
 const removeUser = () => ({type: REMOVE_USER})
+export const removeUserSkill = skillId => ({type: REMOVE_USER_SKILL, skillId})
 
 /**
  * THUNK CREATORS
@@ -75,6 +77,11 @@ export default function(state = defaultUser, action) {
       return action.user
     case REMOVE_USER:
       return defaultUser
+    case REMOVE_USER_SKILL:
+      return {
+        ...state,
+        skills: state.skills.filter(skill => skill.id !== action.skillId)
+      }
     default:
       return state
   }

@@ -32,3 +32,15 @@ nav a {
   position: relative;
   margin: 0 auto;
 }
+
+.UserSkill__listItem > div {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.skillComponent {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}

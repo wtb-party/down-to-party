@@ -18,6 +18,10 @@ router.put('/:id/profile', async (req, res, next) => {
     delete req.body.userId
     const user = await User.findByPk(req.params.id)
     if (user) {
+      if (req.body.skillSelection > 0) {
+        const {id} = await Skill.findOne({where: {id: req.body.skillSelection}})
+        user.addSkill(id)
+      }
       const updatedUser = await user.update(req.body, {
         fields: Object.keys(req.body)
       })
