@@ -10,7 +10,7 @@ import Alert from 'react-bootstrap/Alert'
 const AuthForm = props => {
   const {name, displayName, handleSubmit, error} = props
   return (
-    <Container className="auth-container">
+    <Container>
       <Form onSubmit={handleSubmit} name={name} className="auth-form w-50 p-3">
         {error &&
           error.response && (
