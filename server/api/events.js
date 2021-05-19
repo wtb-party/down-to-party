@@ -18,6 +18,24 @@ router.get('/', async (req, res, next) => {
   }
 })
 
+router.get('/working/:userId', async (req, res, next) => {
+  try {
+    const events = await Event.findAll({
+      include: [
+        {
+          model: User,
+          as: 'workers',
+          where: {id: req.params.userId}
+        },
+        {model: EventType}
+      ]
+    })
+    res.json(events)
+  } catch (err) {
+    next(err)
+  }
+})
+
 router.get('/:id', async (req, res, next) => {
   try {
     const event = await Event.findOne({

@@ -18,6 +18,11 @@ export const fetchEvents = () => async dispatch => {
   dispatch(setEvents(data))
 }
 
+export const fetchWorkerEvents = userId => async dispatch => {
+  const {data} = await axios.get(`/api/events/working/${userId}`)
+  dispatch(setEvents(data))
+}
+
 export const createEvent = (event, history) => async dispatch => {
   const {data} = await axios.post('/api/events', event)
   dispatch(addEvent(data))
