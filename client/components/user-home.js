@@ -1,6 +1,5 @@
 import React from 'react'
 import {Link} from 'react-router-dom'
-import {getCurrentUser} from '../store/user'
 import PropTypes from 'prop-types'
 import {connect} from 'react-redux'
 import Container from 'react-bootstrap/Container'
@@ -8,14 +7,15 @@ import Card from 'react-bootstrap/Card'
 import Row from 'react-bootstrap/Row'
 import Col from 'react-bootstrap/Col'
 import Button from 'react-bootstrap/Button'
+import {fetchWorkerEvents} from '../store/event'
 
 export class UserHome extends React.Component {
   componentDidMount() {
-    this.props.getCurrentUser(this.props.userId)
+    this.props.fetchWorkerEvents(this.props.user.id)
   }
 
   render() {
-    const {email, location, userId, skills} = this.props
+    const {user: {email, location, id, skills, events}, event} = this.props
 
     return (
       <Container>
@@ -31,7 +31,7 @@ export class UserHome extends React.Component {
                   Interested in offering your services for an Event? Be sure to
                   take advantage of our wide network to showcase your skills!
                 </Card.Text>
-                <Button as={Link} to={`/users/${userId}/profile`}>
+                <Button as={Link} to={`/users/${id}/profile`}>
                   Edit Your Profile
                 </Button>
               </Card.Body>
@@ -52,6 +52,67 @@ export class UserHome extends React.Component {
             </Card>
           </Col>
         </Row>
+        <br />
+        <Row className="justify-content-sm-center app-container">
+          <Col xs={12} sm={6}>
+            <h3>Events you're hosting</h3>
+            {events && events.length ? (
+              events.map((event, idx) => (
+                <Card key={idx} style={{marginBottom: 10}}>
+                  <Card.Body>
+                    <Card.Title>{event.eventType.name}</Card.Title>
+                    Location: {event.location}
+                  </Card.Body>
+                  <Card.Footer>
+                    <Row>
+                      <Col xs={8}>Date: {event.date}</Col>
+                      <Col xs={4}>
+                        <Button
+                          className="float-right"
+                          as={Link}
+                          to={`/events/${event.id}/users/${id}`}
+                        >
+                          View Event
+                        </Button>
+                      </Col>
+                    </Row>
+                  </Card.Footer>
+                </Card>
+              ))
+            ) : (
+              <p>You're not hosting any events yet.</p>
+            )}
+          </Col>
+          <Col xs={12} sm={6}>
+            <h3>Events you're working</h3>
+            {event && event.length ? (
+              event.map((e, idx) => (
+                <Card key={e.id}>
+                  <Card.Body>
+                    <Card.Title>{e.eventType.name}</Card.Title>
+                    Location: {e.location}
+                  </Card.Body>
+                  <Card.Footer>
+                    <Row>
+                      <Col xs={8}>Date: {e.date}</Col>
+                      <Col xs={4}>
+                        <Button
+                          className="float-right"
+                          as={Link}
+                          to={`/events/${e.id}/users/${id}`}
+                        >
+                          View Event
+                        </Button>
+                      </Col>
+                    </Row>
+                  </Card.Footer>
+                </Card>
+              ))
+            ) : (
+              <p> You're not working any events yet </p>
+            )}
+          </Col>
+        </Row>
       </Container>
     )
   }
@@ -59,16 +120,14 @@ export class UserHome extends React.Component {
 
 const mapState = state => {
   return {
-    userId: state.user.id,
-    email: state.user.email,
-    location: state.user.location,
-    skills: state.user.skills
+    user: state.user,
+    event: state.event
   }
 }
 
 const mapDispatch = dispatch => {
   return {
-    getCurrentUser: id => dispatch(getCurrentUser(id))
+    fetchWorkerEvents: userId => dispatch(fetchWorkerEvents(userId))
   }
 }
 
