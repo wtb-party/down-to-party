@@ -1,13 +1,15 @@
 const router = require('express').Router()
 const User = require('../db/models/user')
 const Skill = require('../db/models/skill')
+const Event = require('../db/models/event')
+const EventType = require('../db/models/eventType')
 module.exports = router
 
 router.post('/login', async (req, res, next) => {
   try {
     const user = await User.findOne({
       where: {email: req.body.email},
-      include: {model: Skill}
+      include: [{model: Skill}, {model: Event, include: [{model: EventType}]}]
     })
     if (!user) {
       console.log('No such user found:', req.body.email)
@@ -42,7 +44,14 @@ router.post('/logout', (req, res) => {
   res.redirect('/')
 })
 
-router.get('/me', (req, res) => {
+router.get('/me', async (req, res) => {
+  if (req.user) {
+    const propUser = await User.findOne({
+      where: {email: req.user.email},
+      include: [{model: Skill}, {model: Event, include: [{model: EventType}]}]
+    })
+    req.user = propUser
+  }
   res.json(req.user)
 })
 
