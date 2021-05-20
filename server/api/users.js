@@ -1,11 +1,11 @@
 const router = require('express').Router()
-const {User, Skill, Event} = require('../db/models')
+const {User, Skill, Event, EventType} = require('../db/models')
 module.exports = router
 
 router.get('/:id/profile', async (req, res, next) => {
   try {
     const profile = await User.findByPk(req.params.id, {
-      include: {model: Skill}
+      include: [{model: Skill}, {model: Event, include: {model: EventType}}]
     })
     res.status(200).json(profile)
   } catch (e) {
@@ -16,7 +16,9 @@ router.get('/:id/profile', async (req, res, next) => {
 router.put('/:id/profile', async (req, res, next) => {
   try {
     delete req.body.userId
-    const user = await User.findByPk(req.params.id)
+    const user = await User.findByPk(req.params.id, {
+      include: [{model: Event, include: {model: EventType}}]
+    })
     if (user) {
       const updatedUser = await user.update(req.body, {
         fields: Object.keys(req.body)
