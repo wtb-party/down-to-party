@@ -1,33 +1,52 @@
 import React, {useState, useEffect} from 'react'
-import {useSelector} from 'react-redux'
+import {useDispatch, useSelector} from 'react-redux'
+import {updateUser} from '../../store/user'
 import Button from 'react-bootstrap/Button'
 import ListGroup from 'react-bootstrap/ListGroup'
 
 export default function SkillsList({skills}) {
-  const currentUserSkills = useSelector(state => state.user.skills)
-  const [userSkillIds, setUserSkillIds] = useState([])
-
-  useEffect(() => {
-    if (currentUserSkills) {
-      let ids = []
-      currentUserSkills.reduce((acc, userSkill) => ids.push(userSkill.id), [])
-      setUserSkillIds(ids)
-    }
-  }, [])
+  const dispatch = useDispatch()
+  const currentUser = useSelector(state => state.user)
 
   const [hoverIdx, setHoverIdx] = useState(null)
   const handleOnMouseEnter = key => setHoverIdx(key)
   const handleOnMouseLeave = () => setHoverIdx(null)
 
-  const addToUserSkills = skillId =>
-    console.log('addToUserSkills invoked', skillId)
+  const isUserSkill = skill => {
+    const currentUserSkillIds = currentUser.skills.reduce(
+      (skillsArr, currSkill) => [...skillsArr, currSkill.id],
+      []
+    )
 
-  const removeFromUserSkills = skillId =>
-    console.log('removeFromUserSkills invoked', skillId)
+    return currentUserSkillIds.indexOf(skill.id) !== -1
+  }
+
+  const addToUserSkills = skill => {
+    dispatch(
+      updateUser(
+        {...currentUser, skills: [...currentUser.skills, skill]},
+        currentUser.id
+      )
+    )
+  }
+
+  const removeFromUserSkills = skill => {
+    dispatch(
+      updateUser(
+        {
+          ...currentUser,
+          skills: currentUser.skills.filter(
+            currSkill => currSkill.id !== skill.id
+          )
+        },
+        currentUser.id
+      )
+    )
+  }
 
   return (
     <ListGroup>
-      {skills ? (
+      {skills && skills.length ? (
         skills.map(skill => (
           <ListGroup.Item
             key={skill.id}
@@ -37,17 +56,11 @@ export default function SkillsList({skills}) {
           >
             <SkillComponent
               skill={skill}
-              buttonText={
-                userSkillIds.indexOf(skill.id) === -1 ? 'Add' : 'Remove'
-              }
+              buttonText={isUserSkill(skill) ? 'Remove' : 'Add'}
               handleClick={
-                userSkillIds.indexOf(skill.id) === -1
-                  ? addToUserSkills
-                  : removeFromUserSkills
+                isUserSkill(skill) ? removeFromUserSkills : addToUserSkills
               }
-              variant={
-                userSkillIds.indexOf(skill.id) === -1 ? 'success' : 'danger'
-              }
+              variant={isUserSkill(skill) ? 'danger' : 'secondary'}
             />
           </ListGroup.Item>
         ))
@@ -63,11 +76,7 @@ function SkillComponent({buttonText, handleClick, skill, variant}) {
     <div className="skillComponent">
       <div>{skill.title}</div>
       <div>
-        <Button
-          onClick={() => handleClick(skill.id)}
-          size="sm"
-          variant={variant}
-        >
+        <Button onClick={() => handleClick(skill)} size="sm" variant={variant}>
           {buttonText}
         </Button>
       </div>

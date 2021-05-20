@@ -29,7 +29,7 @@ class UserForm extends React.Component {
 
   handleSubmit(evt) {
     evt.preventDefault()
-    this.props.updateUserStore({...this.state, userId: this.props.userId})
+    this.props.updateUserStore({...this.state}, this.props.userId)
     this.props.history.push('/home')
   }
 
