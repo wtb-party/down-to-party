@@ -9,10 +9,33 @@ import Row from 'react-bootstrap/Row'
 import Col from 'react-bootstrap/Col'
 import Button from 'react-bootstrap/Button'
 import {fetchWorkerEvents} from '../store/event'
+import {getCurrentUser} from '../store/user'
 
 export class UserHome extends React.Component {
+  constructor(props) {
+    super(props)
+    this.handleEventStaff = this.handleEventStaff.bind(this)
+  }
   componentDidMount() {
     this.props.fetchWorkerEvents(this.props.user.id)
+    this.props.getCurrentUser(this.props.user.id)
+  }
+  handleEventStaff(e, userId) {
+    const {skills} = this.props.user
+    let eventSkill
+    if (e.workers && e.workers.length) {
+      eventSkill = e.workers.find(({id}) => id === userId)
+      if (eventSkill) {
+        eventSkill = eventSkill.event_staff.skillId
+      }
+      if (skills && skills.length) {
+        const currentSkill = skills.find(({id}) => id === eventSkill)
+        if (currentSkill) {
+          return currentSkill.title
+        }
+      }
+    }
+    return 'No Skills found'
   }
 
   render() {
@@ -61,7 +84,9 @@ export class UserHome extends React.Component {
               events.map((event, idx) => (
                 <Card key={idx} style={{marginBottom: 10}}>
                   <Card.Body>
-                    <Card.Title>{event.eventType.name}</Card.Title>
+                    <Card.Title>
+                      {event && event.eventType ? event.eventType.name : ''}
+                    </Card.Title>
                     Location: {event.location}
                   </Card.Body>
                   <Card.Footer>
@@ -90,8 +115,13 @@ export class UserHome extends React.Component {
               event.map((e, idx) => (
                 <Card key={e.id}>
                   <Card.Body>
-                    <Card.Title>{e.eventType.name}</Card.Title>
-                    Location: {e.location}
+                    <Card.Title>
+                      {e && e.eventType && e.eventType.name
+                        ? e.eventType.name
+                        : ''}
+                    </Card.Title>
+                    <div>Location: {e.location}</div>
+                    <div>As: {this.handleEventStaff(e, id)}</div>
                   </Card.Body>
                   <Card.Footer>
                     <Row>
@@ -128,7 +158,8 @@ const mapState = state => {
 
 const mapDispatch = dispatch => {
   return {
-    fetchWorkerEvents: userId => dispatch(fetchWorkerEvents(userId))
+    fetchWorkerEvents: userId => dispatch(fetchWorkerEvents(userId)),
+    getCurrentUser: userId => dispatch(getCurrentUser(userId))
   }
 }
 
