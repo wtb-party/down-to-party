@@ -6,7 +6,6 @@ import {withRouter} from 'react-router'
 import Form from 'react-bootstrap/Form'
 import Button from 'react-bootstrap/Button'
 import Container from 'react-bootstrap/Container'
-
 import SkillsSelect from '../skills/skills-select'
 
 class UserForm extends React.Component {
@@ -15,7 +14,7 @@ class UserForm extends React.Component {
     this.state = {
       email: this.props.email,
       location: this.props.userLocation ? this.props.userLocation : '',
-      selection: ''
+      skillSelection: 0
     }
 
     this.handleSubmit = this.handleSubmit.bind(this)
@@ -29,7 +28,7 @@ class UserForm extends React.Component {
 
   handleSubmit(evt) {
     evt.preventDefault()
-    this.props.updateUserStore({...this.state, userId: this.props.userId})
+    this.props.updateUserStore({...this.state}, this.props.userId)
     this.props.history.push('/home')
   }
 
@@ -39,7 +38,7 @@ class UserForm extends React.Component {
   }
 
   handleSelection(evt) {
-    this.setState({selection: evt.target.value})
+    this.setState({skillSelection: evt.target.value})
   }
 
   render() {

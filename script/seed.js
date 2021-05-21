@@ -24,9 +24,9 @@ async function seed() {
     Skill.create({title: 'Chef'}),
     Skill.create({title: 'Coordinator'}),
     Skill.create({title: 'Dancer'}),
-    Skill.create({title: 'Decorations'}),
+    Skill.create({title: 'Decorator'}),
     Skill.create({title: 'DJ'}),
-    Skill.create({title: 'Lighting'}),
+    Skill.create({title: 'Lighting Technician'}),
     Skill.create({title: 'Magician'}),
     Skill.create({title: 'MC'}),
     Skill.create({title: 'Server'})
@@ -34,16 +34,34 @@ async function seed() {
 
   const events = await Promise.all([
     Event.create({location: 'Chicago'}),
-    Event.create({location: 'Texas'})
+    Event.create({location: 'Chicago'}),
+    Event.create({location: 'Texas'}),
+    Event.create({location: 'Chicago', public: true}),
+    Event.create({location: 'Lake Forest', public: true}),
+    Event.create({location: 'Mundelein', public: true}),
+    Event.create({location: 'Naperville', public: true})
   ])
-  await events[0].setHost(users[0])
   await events[0].addWorker(users[0], {through: {skillId: skills[0].id}})
   await users[1].addJob(events[0], {through: {skillId: skills[5].id}})
   await events[0].addService(skills[0])
   await events[0].addService(skills[1])
+  await events[3].addService(skills[0])
+  await events[3].addService(skills[1])
+  await events[3].addService(skills[2])
+  await events[3].addService(skills[3])
+  await events[4].addService(skills[4])
+  await events[4].addService(skills[5])
+  await events[5].addService(skills[6])
+  await events[6].addService(skills[7])
   await events[0].setEventType(eventTypes[0])
   await events[1].setEventType(eventTypes[0])
-  await events[1].setHost(users[0])
+  await events[0].setHost(users[0])
+  await events[1].setHost(users[1])
+  await events[2].setHost(users[0])
+  await events[3].setHost(users[1])
+  await events[4].setHost(users[0])
+  await events[5].setHost(users[1])
+  await events[6].setHost(users[0])
   await users[0].addSkill(skills[1])
   await users[1].addSkill(skills[5])
   await skills[0].addUser(users[0])
