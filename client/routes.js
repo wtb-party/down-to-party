@@ -7,8 +7,11 @@ import {
   Signup,
   UserHome,
   UserProfile,
+  Events,
   EventForm,
-  SingleEvent
+  SingleEvent,
+  Skills,
+  Skill
 } from './components'
 import {me} from './store'
 
@@ -36,8 +39,11 @@ class Routes extends Component {
             </Route>
             <Route path="/home" component={UserHome} />
             <Route path="/users/:id/profile" component={UserProfile} />
+            <Route exact path="/events" component={Events} />
             <Route path="/events/new" component={EventForm} />
             <Route path="/events/:id/users/:userId" component={SingleEvent} />
+            <Route exact path="/skills" component={Skills} />
+            <Route path="/skills/:id" component={Skill} />
           </Switch>
         )}
         {/* Displays our Login component as a fallback */}

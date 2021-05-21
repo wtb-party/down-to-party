@@ -7,7 +7,6 @@ import Form from 'react-bootstrap/Form'
 import Button from 'react-bootstrap/Button'
 import Container from 'react-bootstrap/Container'
 import SkillsSelect from '../skills/skills-select'
-import SkillsList from '../skills/skills-list'
 
 class UserForm extends React.Component {
   constructor(props) {
@@ -65,7 +64,6 @@ class UserForm extends React.Component {
             Submit
           </Button>
         </Form>
-        <SkillsList skills={skills} />
       </Container>
     )
   }

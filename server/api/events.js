@@ -5,7 +5,7 @@ module.exports = router
 router.get('/', async (req, res, next) => {
   try {
     const events = await Event.findAll({
-      where: {public: false},
+      where: {public: true},
       include: [
         {model: EventType},
         {model: Skill, as: 'services'},
