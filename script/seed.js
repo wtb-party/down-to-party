@@ -39,12 +39,8 @@ async function seed() {
     Event.create({location: 'Chicago', public: true}),
     Event.create({location: 'Lake Forest', public: true}),
     Event.create({location: 'Mundelein', public: true}),
-    Event.create({location: 'Naperville', public: true}),
-    Event.create({location: 'North Chicago', public: true}),
-    Event.create({location: 'Las Vegas, NV', public: true}),
-    Event.create({location: 'Gary, IN', public: true})
+    Event.create({location: 'Naperville', public: true})
   ])
-  await events[0].setHost(users[0])
   await events[0].addWorker(users[0], {through: {skillId: skills[0].id}})
   await users[1].addJob(events[0], {through: {skillId: skills[5].id}})
   await events[0].addService(skills[0])
@@ -59,7 +55,13 @@ async function seed() {
   await events[6].addService(skills[7])
   await events[0].setEventType(eventTypes[0])
   await events[1].setEventType(eventTypes[0])
-  await events[1].setHost(users[0])
+  await events[0].setHost(users[0])
+  await events[1].setHost(users[1])
+  await events[2].setHost(users[0])
+  await events[3].setHost(users[1])
+  await events[4].setHost(users[0])
+  await events[5].setHost(users[1])
+  await events[6].setHost(users[0])
   await users[0].addSkill(skills[1])
   await users[1].addSkill(skills[5])
   await skills[0].addUser(users[0])

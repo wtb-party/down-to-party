@@ -20,12 +20,6 @@ router.put('/:id/profile', async (req, res, next) => {
       include: [{model: Event, include: {model: EventType}}]
     })
     if (user) {
-      await user.setSkills(
-        req.body.skills.reduce(
-          (skillsArr, currSkill) => [...skillsArr, currSkill.id],
-          []
-        )
-      )
       const updatedUser = await user.update(req.body, {
         fields: Object.keys(req.body)
       })
