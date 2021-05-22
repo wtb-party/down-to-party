@@ -1,85 +1,165 @@
-import React from 'react'
-import {updateUser} from '../../store/user'
+import React, {useState, useEffect} from 'react'
+import {useSelector, useDispatch} from 'react-redux'
 import {fetchAllSkills} from '../../store/skill'
-import {connect} from 'react-redux'
-import {withRouter} from 'react-router'
-import Form from 'react-bootstrap/Form'
-import Button from 'react-bootstrap/Button'
+import {updateUser} from '../../store/user'
 import Container from 'react-bootstrap/Container'
-import SkillsSelect from '../skills/skills-select'
+import Card from 'react-bootstrap/Card'
+import Media from 'react-bootstrap/Media'
+import Image from 'react-bootstrap/Image'
+import Form from 'react-bootstrap/Form'
+import Accordion from 'react-bootstrap/Accordion'
+import Button from 'react-bootstrap/Button'
 
-class UserForm extends React.Component {
-  constructor(props) {
-    super(props)
-    this.state = {
-      email: this.props.email,
-      location: this.props.userLocation ? this.props.userLocation : '',
-      skillSelection: 0
+export default function UserForm({history}) {
+  const dispatch = useDispatch()
+
+  useEffect(() => {
+    dispatch(fetchAllSkills())
+  }, [])
+
+  const user = useSelector(state => state.user)
+  const skills = useSelector(state => state.skills)
+  const [inputs, setInputs] = useState({
+    photoURL: '',
+    location: ''
+  })
+  const [skillIds, setSkillIds] = useState([])
+
+  useEffect(
+    () => {
+      if (user.skills && user.skills.length) {
+        setSkillIds(
+          user.skills.reduce(
+            (skillsArr, currSkill) => [...skillsArr, currSkill.id],
+            []
+          )
+        )
+      }
+    },
+    [user]
+  )
+
+  const handleInput = e => {
+    setInputs({
+      ...inputs,
+      [e.target.id]: e.target.value
+    })
+  }
+
+  const handleSwitch = (e, skill) => {
+    const id = parseInt(e.target.id, 10)
+    if (skillIds.includes(id)) {
+      user.skills = user.skills.filter(userSkill => skill.id !== userSkill.id)
+      setSkillIds(skillIds.filter(skillId => skillId !== id))
+    } else {
+      user.skills = [...user.skills, skill]
+      setSkillIds([...skillIds, id])
     }
-
-    this.handleSubmit = this.handleSubmit.bind(this)
-    this.handleChange = this.handleChange.bind(this)
-    this.handleSelection = this.handleSelection.bind(this)
   }
 
-  componentDidMount() {
-    this.props.fetchAllSkills()
-  }
+  const handleSubmit = e => {
+    e.preventDefault()
 
-  handleSubmit(evt) {
-    evt.preventDefault()
-    this.props.updateUserStore({...this.state}, this.props.userId)
-    this.props.history.push('/home')
-  }
+    if (inputs.photoURL === '') setInputs({...inputs, photoURL: user.photoURL})
+    if (inputs.location === '') setInputs({...inputs, location: user.location})
 
-  handleChange(evt) {
-    evt.preventDefault()
-    this.setState({[evt.target.id]: evt.target.value})
-  }
-
-  handleSelection(evt) {
-    this.setState({skillSelection: evt.target.value})
-  }
-
-  render() {
-    const {skills} = this.props
-    const {location} = this.state
-    return (
-      <Container>
-        <Form onSubmit={this.handleSubmit} className="auth-form w-50 p-3">
-          <Form.Group controlId="location">
-            <Form.Label>Location</Form.Label>
-            <Form.Control
-              type="text"
-              placeholder={location ? location : 'Chicago'}
-              onChange={this.handleChange}
-              value={this.state.location}
-            />
-          </Form.Group>
-          <SkillsSelect
-            skills={skills}
-            handleSelection={this.handleSelection}
-          />
-          <Button variant="primary" type="submit">
-            Submit
-          </Button>
-        </Form>
-      </Container>
+    dispatch(
+      updateUser(
+        {
+          ...user,
+          ...inputs,
+          skillIds
+        },
+        user.id
+      )
     )
-  }
-}
 
-const mapState = state => {
-  return {
-    skills: state.skills
+    history.push(`/users/${user.id}/profile`)
   }
-}
 
-const mapDispatch = dispatch => {
-  return {
-    updateUserStore: (user, userId) => dispatch(updateUser(user, userId)),
-    fetchAllSkills: () => dispatch(fetchAllSkills())
-  }
+  return (
+    <Container>
+      <h1 className="text-center">Edit your profile</h1>
+      <Card className="user-profile center w-75 p-3">
+        <Media style={{marginBottom: 10}}>
+          <Image
+            width={200}
+            height={200}
+            style={{marginRight: 10}}
+            className="align-self-center"
+            src={
+              user.photoURL
+                ? user.photoURL
+                : `https://robohash.org/set_set5/bgset_bg1/${user.email}.png`
+            }
+            alt={user.email}
+            roundedCircle
+          />
+          <Media.Body>
+            <Form>
+              <Form.Group controlId="photoURL">
+                <Form.Label size="sm">URL to your profile picture:</Form.Label>
+                <Form.Control
+                  type="text"
+                  placeholder="https://www.example.com/your-photo"
+                  onChange={e => handleInput(e)}
+                  value={inputs.photoURL}
+                />
+              </Form.Group>
+              <Form.Group controlId="location">
+                <Form.Label size="sm">Location:</Form.Label>
+                <Form.Control
+                  type="text"
+                  placeholder={
+                    user.location ? user.location : 'A galaxy far far away...'
+                  }
+                  onChange={e => handleInput(e)}
+                  value={inputs.location}
+                />
+              </Form.Group>
+            </Form>
+          </Media.Body>
+        </Media>
+        <div>
+          <Accordion style={{marginBottom: 10}}>
+            <Card>
+              <Accordion.Toggle as={Card.Header} eventKey="0">
+                Select skills to track jobs...
+              </Accordion.Toggle>
+              <Accordion.Collapse eventKey="0">
+                <Card.Body className="user-form p-0">
+                  {skills && skills.length ? (
+                    skills.map(skill => (
+                      <Card key={skill.id}>
+                        <Card.Body>
+                          {skill.title}
+                          <Form.Switch
+                            id={skill.id}
+                            className="float-right"
+                            checked={skillIds.includes(skill.id)}
+                            onChange={e => handleSwitch(e, skill)}
+                          />
+                        </Card.Body>
+                      </Card>
+                    ))
+                  ) : (
+                    <p>Loading...</p>
+                  )}
+                </Card.Body>
+              </Accordion.Collapse>
+            </Card>
+          </Accordion>
+        </div>
+        <div>
+          <Button
+            onClick={e => handleSubmit(e)}
+            className="float-right"
+            variant="danger"
+          >
+            Save Changes
+          </Button>
+        </div>
+      </Card>
+    </Container>
+  )
 }
-
-export default withRouter(connect(mapState, mapDispatch)(UserForm))

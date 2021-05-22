@@ -6,6 +6,7 @@
 export {default as Navbar} from './navbar'
 export {default as UserHome} from './user-home'
 export {default as UserProfile} from './users/user-profile'
+export {default as UserForm} from './users/user-form'
 export {default as EventForm} from './events/event-form'
 export {default as SingleEvent} from './events/single-event'
 export {default as Events} from './events/events'
