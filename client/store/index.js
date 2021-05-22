@@ -7,8 +7,16 @@ import skills from './skill'
 import event from './event'
 import eventType from './eventType'
 import singleEvent from './single-event'
+import users from './users'
 
-const reducer = combineReducers({user, skills, event, eventType, singleEvent})
+const reducer = combineReducers({
+  user,
+  users,
+  skills,
+  event,
+  eventType,
+  singleEvent
+})
 const middleware = composeWithDevTools(
   applyMiddleware(thunkMiddleware, createLogger({collapsed: true}))
 )
