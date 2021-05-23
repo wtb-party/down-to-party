@@ -7,6 +7,7 @@ import {
   Signup,
   UserHome,
   UserProfile,
+  UserForm,
   Events,
   EventForm,
   SingleEvent,
@@ -38,7 +39,8 @@ class Routes extends Component {
               <Redirect to="/home" />
             </Route>
             <Route path="/home" component={UserHome} />
-            <Route path="/users/:id/profile" component={UserProfile} />
+            <Route exact path="/users/:id/profile" component={UserProfile} />
+            <Route path="/users/:id/profile/edit" component={UserForm} />
             <Route exact path="/events" component={Events} />
             <Route path="/events/new" component={EventForm} />
             <Route path="/events/:id/users/:userId" component={SingleEvent} />

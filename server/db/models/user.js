@@ -29,6 +29,9 @@ const User = db.define('user', {
   },
   location: {
     type: Sequelize.STRING
+  },
+  photoURL: {
+    type: Sequelize.STRING
   }
 })
 

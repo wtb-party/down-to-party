@@ -2,6 +2,7 @@ import React, {useEffect} from 'react'
 import {useSelector, useDispatch} from 'react-redux'
 import {fetchAllSkills} from '../../store/skill'
 import {Link} from 'react-router-dom'
+import Card from 'react-bootstrap/Card'
 
 export default function Skills() {
   const dispatch = useDispatch()
@@ -15,9 +16,11 @@ export default function Skills() {
     <>
       {allSkills && allSkills.length ? (
         allSkills.map(skill => (
-          <div key={skill.id}>
-            <Link to={`/skills/${skill.id}`}>{skill.title}</Link>
-          </div>
+          <Card key={skill.id}>
+            <Card.Body>
+              <Link to={`/skills/${skill.id}`}>{skill.title}</Link>
+            </Card.Body>
+          </Card>
         ))
       ) : (
         <p>Loading...</p>
