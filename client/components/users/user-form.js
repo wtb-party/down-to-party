@@ -60,13 +60,12 @@ export default function UserForm({history}) {
   const handleSubmit = e => {
     e.preventDefault()
 
-    if (inputs.photoURL === '') setInputs({...inputs, photoURL: user.photoURL})
-    if (inputs.location === '') setInputs({...inputs, location: user.location})
+    if (inputs.photoURL === '') inputs.photoURL = user.photoURL
+    if (inputs.location === '') inputs.location = user.location
 
     dispatch(
       updateUser(
         {
-          ...user,
           ...inputs,
           skillIds
         },
