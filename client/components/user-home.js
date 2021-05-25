@@ -89,18 +89,14 @@ export class UserHome extends React.Component {
                     Location: {event.location}
                   </Card.Body>
                   <Card.Footer>
-                    <Row>
-                      <Col xs={8}>Date: {event.date}</Col>
-                      <Col xs={4}>
-                        <Button
-                          className="float-right"
-                          as={Link}
-                          to={`/events/${event.id}/users/${id}`}
-                        >
-                          View Event
-                        </Button>
-                      </Col>
-                    </Row>
+                    Date: {event.date}
+                    <Button
+                      className="float-right"
+                      as={Link}
+                      to={`/events/${event.id}/users/${id}`}
+                    >
+                      View Event
+                    </Button>
                   </Card.Footer>
                 </Card>
               ))
@@ -118,23 +114,22 @@ export class UserHome extends React.Component {
                       {e && e.eventType && e.eventType.name
                         ? e.eventType.name
                         : ''}
+                      <span className="gray-small">
+                        {' '}
+                        as: {this.handleEventStaff(e, id)}
+                      </span>
                     </Card.Title>
                     <div>Location: {e.location}</div>
-                    <div>As: {this.handleEventStaff(e, id)}</div>
                   </Card.Body>
                   <Card.Footer>
-                    <Row>
-                      <Col xs={8}>Date: {e.date}</Col>
-                      <Col xs={4}>
-                        <Button
-                          className="float-right"
-                          as={Link}
-                          to={`/events/${e.id}/users/${id}`}
-                        >
-                          View Event
-                        </Button>
-                      </Col>
-                    </Row>
+                    Date: {e.date}
+                    <Button
+                      className="float-right"
+                      as={Link}
+                      to={`/events/${e.id}/users/${id}`}
+                    >
+                      View Event
+                    </Button>
                   </Card.Footer>
                 </Card>
               ))

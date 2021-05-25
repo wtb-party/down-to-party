@@ -52,6 +52,18 @@ router.get('/:id', async (req, res, next) => {
   }
 })
 
+router.delete('/:id', async (req, res, next) => {
+  try {
+    const event = await Event.findByPk(req.params.id)
+    if (event) {
+      await event.destroy()
+      res.status(200).send('Successfully deleted Event')
+    }
+  } catch (err) {
+    next(err)
+  }
+})
+
 router.post('/', async (req, res, next) => {
   try {
     const {location, eventType, service, userId} = req.body
