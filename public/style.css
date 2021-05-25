@@ -32,3 +32,8 @@ nav a {
   position: relative;
   margin: 0 auto;
 }
+
+.gray-small {
+  font-size: 15px;
+  color: gray;
+}
