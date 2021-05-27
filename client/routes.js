@@ -8,9 +8,11 @@ import {
   UserHome,
   UserProfile,
   UserForm,
+  Providers,
   Events,
   EventForm,
   SingleEvent,
+  Listings,
   Skills,
   Skill
 } from './components'
@@ -41,9 +43,11 @@ class Routes extends Component {
             <Route path="/home" component={UserHome} />
             <Route exact path="/users/:id/profile" component={UserProfile} />
             <Route path="/users/:id/profile/edit" component={UserForm} />
+            <Route exact path="/providers" component={Providers} />
             <Route exact path="/events" component={Events} />
             <Route path="/events/new" component={EventForm} />
             <Route path="/events/:id/users/:userId" component={SingleEvent} />
+            <Route path="/listings" component={Listings} />
             <Route exact path="/skills" component={Skills} />
             <Route path="/skills/:id" component={Skill} />
           </Switch>

@@ -19,9 +19,9 @@ export default function UserProfile() {
       <Card className="user-profile center w-75 p-3">
         <Media style={{marginBottom: 10}}>
           <Image
-            width={200}
-            height={200}
-            style={{marginRight: 10}}
+            width={300}
+            height={300}
+            style={{marginRight: 30}}
             className="align-self-center"
             src={
               photoURL

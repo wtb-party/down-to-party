@@ -1,7 +1,7 @@
 'use strict'
 
 const db = require('../server/db')
-const {User, Event, Skill, EventType} = require('../server/db/models')
+const {User, Provider, Event, Skill, EventType} = require('../server/db/models')
 
 async function seed() {
   await db.sync({force: true})
@@ -9,7 +9,23 @@ async function seed() {
 
   const users = await Promise.all([
     User.create({email: 'cody@email.com', password: '123'}),
-    User.create({email: 'murphy@email.com', password: '123'})
+    User.create({email: 'murphy@email.com', password: '123'}),
+    User.create({email: 'user1@email.com', password: '123'}),
+    User.create({email: 'user2@email.com', password: '123'}),
+    User.create({email: 'user3@email.com', password: '123'}),
+    User.create({email: 'user4@email.com', password: '123'}),
+    User.create({email: 'user5@email.com', password: '123'}),
+    User.create({email: 'user6@email.com', password: '123'}),
+    User.create({email: 'user7@email.com', password: '123'}),
+    User.create({email: 'user8@email.com', password: '123'})
+  ])
+
+  const providers = await Promise.all([
+    Provider.create({isActive: true}),
+    Provider.create({isActive: true}),
+    Provider.create({isActive: true}),
+    Provider.create(),
+    Provider.create()
   ])
 
   const eventTypes = await Promise.all([
@@ -41,30 +57,45 @@ async function seed() {
     Event.create({location: 'Mundelein', public: true}),
     Event.create({location: 'Naperville', public: true})
   ])
-  await events[0].addWorker(users[0], {through: {skillId: skills[0].id}})
-  await users[1].addJob(events[0], {through: {skillId: skills[5].id}})
-  await events[0].addService(skills[0])
-  await events[0].addService(skills[1])
-  await events[3].addService(skills[0])
-  await events[3].addService(skills[1])
-  await events[3].addService(skills[2])
-  await events[3].addService(skills[3])
-  await events[4].addService(skills[4])
-  await events[4].addService(skills[5])
-  await events[5].addService(skills[6])
-  await events[6].addService(skills[7])
-  await events[0].setEventType(eventTypes[0])
-  await events[1].setEventType(eventTypes[0])
-  await events[0].setHost(users[0])
-  await events[1].setHost(users[1])
-  await events[2].setHost(users[0])
-  await events[3].setHost(users[1])
-  await events[4].setHost(users[0])
-  await events[5].setHost(users[1])
-  await events[6].setHost(users[0])
-  await users[0].addSkill(skills[1])
-  await users[1].addSkill(skills[5])
-  await skills[0].addUser(users[0])
+
+  await Promise.all([
+    // events[0].addWorker(users[0], {through: {skillId: skills[0].id}}),
+    // users[1].addJob(events[0], {through: {skillId: skills[5].id}}),
+    events[0].addRole(skills[0]),
+    events[0].addRole(skills[1]),
+    events[3].addRole(skills[0]),
+    events[3].addRole(skills[1]),
+    events[3].addRole(skills[2]),
+    events[3].addRole(skills[3]),
+    events[4].addRole(skills[4]),
+    events[4].addRole(skills[5]),
+    events[5].addRole(skills[6]),
+    events[6].addRole(skills[7]),
+    events[0].setEventType(eventTypes[0]),
+    events[1].setEventType(eventTypes[0]),
+    events[0].setHost(users[0]),
+    events[1].setHost(users[1]),
+    events[2].setHost(users[0]),
+    events[3].setHost(users[1]),
+    events[4].setHost(users[0]),
+    events[5].setHost(users[1]),
+    events[6].setHost(users[0]),
+    // users[0].addSkill(skills[1]),
+    // users[1].addSkill(skills[5]),
+    // skills[0].addUser(users[0]),
+
+    users[0].setProvider(providers[0]),
+    users[1].setProvider(providers[1]),
+    users[2].setProvider(providers[2]),
+    users[3].setProvider(providers[3]),
+    users[4].setProvider(providers[4]),
+    providers[0].setServices([skills[0], skills[1]]),
+    providers[1].setServices([skills[5]]),
+    providers[2].setServices([skills[2], skills[4], skills[6]]),
+    providers[3].setServices([skills[1], skills[3], skills[5], skills[7]]),
+    providers[4].setServices([]),
+    events[3].addContractor(providers[0])
+  ])
 
   console.log(`seeded ${users.length} users`)
   console.log(`seeded ${skills.length} skills`)

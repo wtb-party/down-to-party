@@ -1,5 +1,5 @@
 const router = require('express').Router()
-const {User, Skill, Event, EventType} = require('../db/models')
+const {User, Provider, Skill, Event, EventType} = require('../db/models')
 module.exports = router
 
 router.get('/:id/profile', async (req, res, next) => {
@@ -37,7 +37,14 @@ router.get('/', async (req, res, next) => {
   try {
     const users = await User.findAll({
       attributes: ['id', 'email'],
-      include: [{model: Skill}, {model: Event}]
+      include: [
+        // {model: Skill, attributes: ['id', 'title'], through: {attributes: []}},
+        {
+          model: Event,
+          attributes: ['id', 'location', 'date', 'public', 'eventTypeId']
+        },
+        {model: Provider, attributes: ['id', 'isSeeking']}
+      ]
     })
     res.json(users)
   } catch (err) {
