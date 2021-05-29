@@ -6,7 +6,9 @@ module.exports = router
 router.get('/', async (req, res, next) => {
   try {
     const query = req.query
-    if (query) {
+    if (query && Object.keys(query).length !== 0) {
+      console.log('IN THIS BLOCK')
+      console.log('QUERY', query)
       const services = await Service.findAll({
         include: [
           {
