@@ -36,14 +36,14 @@ router.put('/:id/profile', async (req, res, next) => {
 router.get('/', async (req, res, next) => {
   try {
     const users = await User.findAll({
-      attributes: ['id', 'email'],
+      attributes: ['id', 'email', 'photoURL'],
       include: [
         // {model: Skill, attributes: ['id', 'title'], through: {attributes: []}},
         {
           model: Event,
           attributes: ['id', 'location', 'date', 'public', 'eventTypeId']
         },
-        {model: Provider, attributes: ['id', 'isSeeking']}
+        {model: Provider, attributes: ['id']}
       ]
     })
     res.json(users)
