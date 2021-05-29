@@ -2,7 +2,6 @@ const router = require('express').Router()
 const {
   Event,
   Skill,
-  User,
   EventType,
   Contract,
   Provider,

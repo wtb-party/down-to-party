@@ -8,11 +8,12 @@ router.get('/', async (req, res, next) => {
       where: {
         isActive: true
       },
-      attributes: [],
+      attributes: ['id'],
       include: [
         {
           model: User,
-          attributes: ['id', 'email', 'location', 'photoURL']
+          as: 'profile',
+          attributes: ['id', 'location', 'firstName', 'lastName', 'photoURL']
         },
         {
           model: Service,
@@ -24,6 +25,46 @@ router.get('/', async (req, res, next) => {
       ]
     })
     res.status(200).json(providers)
+  } catch (err) {
+    next(err)
+  }
+})
+
+router.get('/:providerId', async (req, res, next) => {
+  try {
+    const provider = await Provider.findOne({
+      where: {
+        id: req.params.providerId,
+        isActive: true
+      },
+      attributes: ['id'],
+      include: [
+        {
+          model: User,
+          as: 'profile',
+          attributes: [
+            'id',
+            'email',
+            'location',
+            'firstName',
+            'lastName',
+            'photoURL'
+          ]
+        },
+        {
+          model: Service,
+          attributes: ['id'],
+          include: {
+            model: Skill
+          }
+        }
+      ]
+    })
+    if (provider) {
+      res.status(200).json(provider)
+    } else {
+      res.sendStatus(404)
+    }
   } catch (err) {
     next(err)
   }

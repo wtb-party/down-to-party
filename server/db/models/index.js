@@ -40,7 +40,7 @@ Skill.belongsToMany(User, {through: 'user_skills'})
 
 // api/v2
 User.hasOne(Provider)
-Provider.belongsTo(User)
+Provider.belongsTo(User, {as: 'profile', foreignKey: 'userId'})
 
 Provider.belongsToMany(Event, {as: 'jobs', through: Contract})
 Event.belongsToMany(Provider, {as: 'contractors', through: Contract})
@@ -55,6 +55,12 @@ Provider.hasMany(Service)
 Service.belongsTo(Provider)
 Skill.hasMany(Service)
 Service.belongsTo(Skill)
+
+Contract.belongsToMany(Service, {through: 'contract_services'})
+Service.belongsToMany(Contract, {through: 'contract_services'})
+
+User.belongsToMany(Contract, {through: 'user_contracts'})
+Contract.belongsToMany(User, {through: 'user_contracts'})
 
 module.exports = {
   User,
