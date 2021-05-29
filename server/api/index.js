@@ -7,7 +7,7 @@ router.use('/skills', require('./skills'))
 router.use('/events', require('./events'))
 router.use('/listings', require('./listings'))
 router.use('/eventTypes', require('./eventTypes'))
-
+router.use('/services', require('./services'))
 router.use((req, res, next) => {
   const error = new Error('Not Found')
   error.status = 404

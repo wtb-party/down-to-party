@@ -7,7 +7,6 @@ import Card from 'react-bootstrap/Card'
 import Row from 'react-bootstrap/Row'
 import Col from 'react-bootstrap/Col'
 import Button from 'react-bootstrap/Button'
-import {fetchWorkerEvents} from '../store/event'
 import {getCurrentUser} from '../store/user'
 
 export class UserHome extends React.Component {
@@ -16,7 +15,6 @@ export class UserHome extends React.Component {
     this.handleEventStaff = this.handleEventStaff.bind(this)
   }
   componentDidMount() {
-    this.props.fetchWorkerEvents(this.props.user.id)
     this.props.getCurrentUser(this.props.user.id)
   }
   handleEventStaff(e, userId) {
@@ -93,7 +91,7 @@ export class UserHome extends React.Component {
                     <Button
                       className="float-right"
                       as={Link}
-                      to={`/events/${event.id}/users/${id}`}
+                      to={`/events/${event.id}`}
                     >
                       View Event
                     </Button>
@@ -102,39 +100,6 @@ export class UserHome extends React.Component {
               ))
             ) : (
               <p>You're not hosting any events yet.</p>
-            )}
-          </Col>
-          <Col xs={12} sm={6}>
-            <h3>Events you're working</h3>
-            {event && event.length ? (
-              event.map((e, idx) => (
-                <Card key={e.id}>
-                  <Card.Body>
-                    <Card.Title>
-                      {e && e.eventType && e.eventType.name
-                        ? e.eventType.name
-                        : ''}
-                      <span className="gray-small">
-                        {' '}
-                        as: {this.handleEventStaff(e, id)}
-                      </span>
-                    </Card.Title>
-                    <div>Location: {e.location}</div>
-                  </Card.Body>
-                  <Card.Footer>
-                    Date: {e.date}
-                    <Button
-                      className="float-right"
-                      as={Link}
-                      to={`/events/${e.id}/users/${id}`}
-                    >
-                      View Event
-                    </Button>
-                  </Card.Footer>
-                </Card>
-              ))
-            ) : (
-              <p> You're not working any events yet </p>
             )}
           </Col>
         </Row>
@@ -152,7 +117,6 @@ const mapState = state => {
 
 const mapDispatch = dispatch => {
   return {
-    fetchWorkerEvents: userId => dispatch(fetchWorkerEvents(userId)),
     getCurrentUser: userId => dispatch(getCurrentUser(userId))
   }
 }

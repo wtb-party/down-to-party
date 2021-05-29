@@ -10,6 +10,7 @@ import singleEvent from './single-event'
 import listings from './listings'
 import users from './users'
 import providers from './providers'
+import services from './services'
 
 const reducer = combineReducers({
   user,
@@ -19,7 +20,8 @@ const reducer = combineReducers({
   event,
   eventType,
   singleEvent,
-  listings
+  listings,
+  services
 })
 const middleware = composeWithDevTools(
   applyMiddleware(thunkMiddleware, createLogger({collapsed: true}))

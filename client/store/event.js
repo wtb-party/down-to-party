@@ -32,7 +32,7 @@ export const fetchWorkerEvents = userId => async dispatch => {
 export const createEvent = (event, history) => async dispatch => {
   const {data} = await axios.post('/api/events', event)
   dispatch(addEvent(data))
-  history.push(`/events/${data.id}/users/${event.userId}`)
+  history.push(`/events/${data.id}`)
 }
 
 export const destroyEvent = (id, history) => async dispatch => {
