@@ -1,26 +1,24 @@
 const Sequelize = require('sequelize')
 const db = require('../db')
 
-const Listing = db.define('listing', {
-  id: {
-    type: Sequelize.INTEGER,
-    primaryKey: true,
-    autoIncrement: true,
-    allowNull: false
-  },
-  eventId: {
+const Quote = db.define('quote', {
+  listingId: {
     type: Sequelize.INTEGER,
     allowNull: false
   },
-  skillId: {
+  providerId: {
     type: Sequelize.INTEGER,
     allowNull: false
   },
-  positionsAvailable: {
+  serviceId: {
     type: Sequelize.INTEGER,
-    defaultValue: 1,
+    allowNull: false
+  },
+  status: {
+    type: Sequelize.ENUM('pending', 'accepted', 'rejected'),
+    defaultValue: 'pending',
     allowNull: false
   }
 })
 
-module.exports = Listing
+module.exports = Quote

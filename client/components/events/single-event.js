@@ -59,7 +59,7 @@ class SingleEvent extends React.Component {
                     {services && services.length ? (
                       services.map(service => {
                         if (service.skill.title === listing.role.title) {
-                          const {email, photoURL} = service.provider.user
+                          const {email, photoURL} = service.provider.profile
                           return (
                             <Card key={service.id} style={{maxWidth: '16rem'}}>
                               <Card.Img

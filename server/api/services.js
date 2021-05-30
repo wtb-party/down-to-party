@@ -21,7 +21,8 @@ router.get('/', async (req, res, next) => {
           },
           {
             model: Provider,
-            include: [{model: User}]
+            where: {isActive: true},
+            include: [{model: User, as: 'profile'}]
           }
         ]
       })

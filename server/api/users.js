@@ -38,7 +38,6 @@ router.get('/', async (req, res, next) => {
     const users = await User.findAll({
       attributes: ['id', 'email', 'photoURL'],
       include: [
-        // {model: Skill, attributes: ['id', 'title'], through: {attributes: []}},
         {
           model: Event,
           attributes: ['id', 'location', 'date', 'public', 'eventTypeId']

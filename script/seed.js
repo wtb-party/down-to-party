@@ -2,12 +2,14 @@
 
 const db = require('../server/db')
 const {
+  Skill,
   User,
   Provider,
   Service,
   Event,
-  Skill,
-  EventType
+  EventType,
+  Listing,
+  Quote
 } = require('../server/db/models')
 
 async function seed() {
@@ -27,6 +29,15 @@ async function seed() {
   ])
 
   const skills = await Skill.findAll()
+
+  await EventType.bulkCreate([
+    {name: 'Birthday Party'},
+    {name: 'Cocktail Party'},
+    {name: 'Business Outing'},
+    {name: 'Housewarming Party'}
+  ])
+
+  const eventTypes = EventType.findAll()
 
   await User.bulkCreate([
     {
@@ -253,6 +264,42 @@ async function seed() {
   ])
 
   const events = await Event.findAll()
+
+  await Listing.bulkCreate([
+    {eventId: events[0].id, skillId: skills[0].id, positionsAvailable: 3},
+    {eventId: events[0].id, skillId: skills[2].id},
+    {eventId: events[0].id, skillId: skills[9].id, positionsAvailable: 3},
+    {eventId: events[1].id, skillId: skills[0].id, positionsAvailable: 3},
+    {eventId: events[2].id, skillId: skills[7].id},
+    {eventId: events[3].id, skillId: skills[5].id},
+    {eventId: events[3].id, skillId: skills[6].id},
+    {eventId: events[5].id, skillId: skills[0].id, positionsAvailable: 5},
+    {eventId: events[5].id, skillId: skills[3].id, positionsAvailable: 5},
+    {eventId: events[5].id, skillId: skills[5].id, positionsAvailable: 5},
+    {eventId: events[5].id, skillId: skills[6].id, positionsAvailable: 5},
+    {eventId: events[5].id, skillId: skills[8].id, positionsAvailable: 5},
+    {eventId: events[6].id, skillId: skills[3].id, positionsAvailable: 3},
+    {eventId: events[6].id, skillId: skills[6].id, positionsAvailable: 3},
+    {eventId: events[7].id, skillId: skills[1].id},
+    {eventId: events[7].id, skillId: skills[9].id, positionsAvailable: 3},
+    {eventId: events[8].id, skillId: skills[9].id},
+    {eventId: events[9].id, skillId: skills[4].id},
+    {eventId: events[11].id, skillId: skills[3].id},
+    {eventId: events[11].id, skillId: skills[4].id},
+    {eventId: events[12].id, skillId: skills[3].id, positionsAvailable: 5},
+    {eventId: events[12].id, skillId: skills[5].id},
+    {eventId: events[13].id, skillId: skills[0].id}
+  ])
+
+  const listings = await Listing.findAll()
+
+  await Quote.bulkCreate([
+    {
+      listingId: listings[0].id,
+      providerId: providers[1].id,
+      serviceId: services[3].id
+    }
+  ])
 
   console.log('db synced!')
 
