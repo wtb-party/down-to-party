@@ -56,3 +56,4 @@ router.get('/me', async (req, res) => {
 })
 
 router.use('/google', require('./google'))
+router.use('/auth0', require('./auth0'))

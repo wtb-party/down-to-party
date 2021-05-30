@@ -10,6 +10,7 @@ const sessionStore = new SequelizeStore({db})
 const PORT = process.env.PORT || 8080
 const app = express()
 const socketio = require('socket.io')
+require('dotenv').config()
 module.exports = app
 
 // This is a global Mocha hook, used for resource cleanup.
@@ -29,12 +30,12 @@ if (process.env.NODE_ENV === 'test') {
 if (process.env.NODE_ENV !== 'production') require('../secrets')
 
 // passport registration
-passport.serializeUser((user, done) => done(null, user.id))
+passport.serializeUser((user, done) => done(null, user))
 
-passport.deserializeUser(async (id, done) => {
+passport.deserializeUser(async (user, done) => {
   try {
-    const user = await db.models.user.findByPk(id)
-    done(null, user)
+    const u = await db.models.user.findByPk(user.id)
+    done(null, u)
   } catch (err) {
     done(err)
   }
@@ -56,10 +57,15 @@ const createApp = () => {
     session({
       secret: process.env.SESSION_SECRET || 'my best friend is Cody',
       store: sessionStore,
+      cookie: {},
       resave: false,
       saveUninitialized: false
     })
   )
+  if (app.get('env') === 'production') {
+    // Serve secure cookies, requires HTTPS
+    session.cookie.secure = true
+  }
   app.use(passport.initialize())
   app.use(passport.session())
 
@@ -69,6 +75,11 @@ const createApp = () => {
 
   // static file-serving middleware
   app.use(express.static(path.join(__dirname, '..', 'public')))
+
+  app.use((req, res, next) => {
+    res.locals.isAuthenticated = req.isAuthenticated()
+    next()
+  })
 
   // any remaining requests with an extension (.js, .css, etc.) send 404
   app.use((req, res, next) => {
