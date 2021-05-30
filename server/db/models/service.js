@@ -10,8 +10,16 @@ const Service = db.define(
       autoIncrement: true,
       allowNull: false
     },
+    providerId: {
+      type: Sequelize.INTEGER,
+      allowNull: false
+    },
+    skillId: {
+      type: Sequelize.INTEGER,
+      allowNull: false
+    },
     rate1: {
-      type: Sequelize.DECIMAL(2),
+      type: Sequelize.DECIMAL(8, 2),
       defaultValue: 0.0,
       allowNull: false
     },
@@ -21,7 +29,7 @@ const Service = db.define(
       allowNull: false
     },
     rate2: {
-      type: Sequelize.DECIMAL(2)
+      type: Sequelize.DECIMAL(8, 2)
     },
     rate2Mode: {
       type: Sequelize.ENUM('flat', 'daily', 'hourly', 'tipped', 'deposit')

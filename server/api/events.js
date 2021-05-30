@@ -2,7 +2,6 @@ const router = require('express').Router()
 const {
   Event,
   Skill,
-  User,
   EventType,
   Contract,
   Provider,
@@ -15,7 +14,7 @@ router.get('/', async (req, res, next) => {
   try {
     const events = await Event.findAll({
       where: {public: false},
-      include: [{model: EventType}, {model: Skill, as: 'roles'}]
+      include: [{model: EventType}, {model: Skill}]
     })
     res.json(events)
   } catch (err) {
@@ -59,15 +58,17 @@ router.post('/', async (req, res, next) => {
     const {location, eventType, service, userId} = req.body
     const type = await EventType.findOne({where: {name: eventType}})
     const skill = await Skill.findOne({where: {title: service}})
-    const newEvent = await Event.create({location})
+    const newEvent = await Event.create({userId, location})
 
     if (newEvent) {
       await newEvent.setHost(userId)
       await newEvent.setEventType(type)
-      await newEvent.addRole(skill)
+      // addListing() is looking to add an existing Listing instance to this Event record by id, we need to create a new one
+      await newEvent.createListing({eventId: newEvent.id, skillId: skill.id})
       res.status(201).json(newEvent)
     }
   } catch (err) {
     console.error(err)
+    next(err)
   }
 })

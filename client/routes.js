@@ -14,7 +14,8 @@ import {
   SingleEvent,
   Listings,
   Skills,
-  Skill
+  Skill,
+  Provider
 } from './components'
 import {me} from './store'
 
@@ -44,6 +45,7 @@ class Routes extends Component {
             <Route exact path="/users/:id/profile" component={UserProfile} />
             <Route path="/users/:id/profile/edit" component={UserForm} />
             <Route exact path="/providers" component={Providers} />
+            <Route path="/providers/:providerId" component={Provider} />
             <Route exact path="/events" component={Events} />
             <Route path="/events/new" component={EventForm} />
             <Route path="/events/:id" component={SingleEvent} />

@@ -6,6 +6,7 @@ const EventType = require('./eventType')
 const Listing = require('./listing')
 const Skill = require('./skill')
 const Service = require('./service')
+const Quote = require('./quote')
 const Sequelize = require('sequelize')
 const db = require('../db')
 
@@ -19,12 +20,8 @@ const EventStaff = db.define('event_staff', {
 User.hasMany(Event)
 Event.belongsTo(User, {as: 'Host', foreignKey: 'userId'})
 
-// User & Event for finding jobs as user, and finding workers as an event
-// User.belongsToMany(Event, {as: 'jobs', through: EventStaff})
-// Event.belongsToMany(User, {as: 'workers', through: EventStaff})
-
 // Event & Skill so we don't store a bunch of random services
-Event.belongsToMany(Skill, {as: 'roles', through: Listing})
+Event.belongsToMany(Skill, {through: Listing})
 Skill.belongsToMany(Event, {through: Listing})
 Event.hasMany(Listing)
 Listing.belongsTo(Event)
@@ -40,7 +37,7 @@ Skill.belongsToMany(User, {through: 'user_skills'})
 
 // api/v2
 User.hasOne(Provider)
-Provider.belongsTo(User)
+Provider.belongsTo(User, {as: 'profile', foreignKey: 'userId'})
 
 Provider.belongsToMany(Event, {as: 'jobs', through: Contract})
 Event.belongsToMany(Provider, {as: 'contractors', through: Contract})
@@ -56,6 +53,15 @@ Service.belongsTo(Provider)
 Skill.hasMany(Service)
 Service.belongsTo(Skill)
 
+Listing.belongsToMany(Provider, {as: 'applicants', through: Quote})
+Provider.belongsToMany(Listing, {as: 'requests', through: Quote})
+Listing.hasMany(Quote)
+Quote.belongsTo(Listing)
+Provider.hasMany(Quote)
+Quote.belongsTo(Provider)
+Service.hasMany(Quote)
+Quote.belongsTo(Service)
+
 module.exports = {
   User,
   Provider,
@@ -65,5 +71,6 @@ module.exports = {
   Skill,
   Service,
   EventStaff,
-  EventType
+  EventType,
+  Quote
 }
