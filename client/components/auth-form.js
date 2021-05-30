@@ -28,12 +28,7 @@ const AuthForm = props => {
           <Form.Label>Password</Form.Label>
           <Form.Control type="password" placeholder="Password" />
         </Form.Group>
-        <Button
-          variant="primary"
-          type="submit"
-          type="submit"
-          style={{marginRight: 10}}
-        >
+        <Button variant="primary" type="submit" style={{marginRight: 10}}>
           {displayName}
         </Button>
         <Button href="/auth/auth0">Auth0 Login</Button>
