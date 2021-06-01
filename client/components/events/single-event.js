@@ -58,7 +58,7 @@ class SingleEvent extends React.Component {
                   <CardDeck>
                     {services && services.length ? (
                       services.map(service => {
-                        if (service.skill.title === listing.role.title) {
+                        if (service.type.title === listing.role.title) {
                           const {email, photoURL} = service.provider.profile
                           return (
                             <Card key={service.id} style={{maxWidth: '16rem'}}>

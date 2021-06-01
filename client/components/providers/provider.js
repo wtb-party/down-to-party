@@ -1,6 +1,7 @@
 import React, {useEffect} from 'react'
 import {useDispatch, useSelector} from 'react-redux'
 import {fetchProvider} from '../../store/providers'
+import ProviderProfile from './provider-profile'
 import Container from 'react-bootstrap/Container'
 
 export default function Provider({match}) {
@@ -12,7 +13,7 @@ export default function Provider({match}) {
     dispatch(fetchProvider(match.params.providerId))
   }, [])
 
-  const isAuthenticatedUser = () => {
+  const isAuthenticatedProvider = () => {
     return provider.profile.id === user.id
   }
 
@@ -20,11 +21,10 @@ export default function Provider({match}) {
     <Container>
       {provider ? (
         provider.profile && provider.profile.id ? (
-          isAuthenticatedUser() ? (
-            <p>Authenticated User {provider.profile.firstName}</p>
-          ) : (
-            <p>Different User {provider.profile.firstName}</p>
-          )
+          <ProviderProfile
+            provider={provider}
+            isAuthenticatedProvider={isAuthenticatedProvider()}
+          />
         ) : (
           <p>Not found</p>
         )

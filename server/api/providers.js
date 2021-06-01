@@ -32,7 +32,8 @@ router.get('/', async (req, res, next) => {
           model: Service,
           attributes: ['id'],
           include: {
-            model: Skill
+            model: Skill,
+            as: 'type'
           }
         }
       ]
@@ -66,9 +67,10 @@ router.get('/:providerId', async (req, res, next) => {
         },
         {
           model: Service,
-          attributes: ['id'],
+          attributes: ['id', 'rate1', 'rate1Mode', 'rate2', 'rate2Mode'],
           include: {
-            model: Skill
+            model: Skill,
+            as: 'type'
           }
         }
       ]

@@ -57,14 +57,14 @@ export default function Providers() {
                   <Accordion style={{marginBottom: 10}}>
                     <Card>
                       <Accordion.Toggle as={Card.Header} eventKey="0">
-                        View {firstName + "'s"} skills:
+                        View {firstName + "'s"} services:
                       </Accordion.Toggle>
                       <Accordion.Collapse eventKey="0">
                         <Card.Body className="providers p-0">
                           {services.length ? (
-                            services.map(({id, skill}) => (
-                              <Card key={`skill-${id}`}>
-                                <Card.Body>{skill.title}</Card.Body>
+                            services.map(({id: typeId, type}) => (
+                              <Card key={`type-${typeId}`}>
+                                <Card.Body>{type.title}</Card.Body>
                               </Card>
                             ))
                           ) : (

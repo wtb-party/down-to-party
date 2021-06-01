@@ -51,7 +51,7 @@ Skill.belongsToMany(Provider, {as: 'providers', through: Service})
 Provider.hasMany(Service)
 Service.belongsTo(Provider)
 Skill.hasMany(Service)
-Service.belongsTo(Skill)
+Service.belongsTo(Skill, {as: 'type', foreignKey: 'skillId'})
 
 Listing.belongsToMany(Provider, {as: 'applicants', through: Quote})
 Provider.belongsToMany(Listing, {as: 'requests', through: Quote})

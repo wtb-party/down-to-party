@@ -11,6 +11,7 @@ router.get('/', async (req, res, next) => {
         include: [
           {
             model: Skill,
+            as: 'type',
             where: {
               title: {
                 [Op.in]: Array.isArray(query.title)

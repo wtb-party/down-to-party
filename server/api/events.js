@@ -63,7 +63,6 @@ router.post('/', async (req, res, next) => {
     if (newEvent) {
       await newEvent.setHost(userId)
       await newEvent.setEventType(type)
-      // addListing() is looking to add an existing Listing instance to this Event record by id, we need to create a new one
       await newEvent.createListing({eventId: newEvent.id, skillId: skill.id})
       res.status(201).json(newEvent)
     }
