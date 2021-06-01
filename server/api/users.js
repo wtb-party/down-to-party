@@ -5,7 +5,11 @@ module.exports = router
 router.get('/:id/profile', async (req, res, next) => {
   try {
     const profile = await User.findByPk(req.params.id, {
-      include: [{model: Skill}, {model: Event, include: {model: EventType}}]
+      include: [
+        {model: Provider},
+        {model: Skill},
+        {model: Event, include: {model: EventType}}
+      ]
     })
     res.status(200).json(profile)
   } catch (e) {

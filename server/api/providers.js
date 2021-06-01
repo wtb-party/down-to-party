@@ -2,6 +2,19 @@ const router = require('express').Router()
 const {Provider, User, Skill, Service} = require('../db/models')
 module.exports = router
 
+router.post('/new', async (req, res, next) => {
+  try {
+    const {userId} = req.body
+    const provider = await Provider.create({
+      userId,
+      isActive: true
+    })
+    provider ? res.status(201).json(provider) : res.sendStatus(500)
+  } catch (err) {
+    next(err)
+  }
+})
+
 router.get('/', async (req, res, next) => {
   try {
     const providers = await Provider.findAll({

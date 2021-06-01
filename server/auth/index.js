@@ -3,6 +3,7 @@ const User = require('../db/models/user')
 const Skill = require('../db/models/skill')
 const Event = require('../db/models/event')
 const EventType = require('../db/models/eventType')
+const {Provider} = require('../db/models')
 module.exports = router
 
 router.post('/login', async (req, res, next) => {
@@ -48,7 +49,11 @@ router.get('/me', async (req, res) => {
   if (req.user) {
     const propUser = await User.findOne({
       where: {email: req.user.email},
-      include: [{model: Skill}, {model: Event, include: [{model: EventType}]}]
+      include: [
+        {model: Provider},
+        {model: Skill},
+        {model: Event, include: [{model: EventType}]}
+      ]
     })
     req.user = propUser
   }
