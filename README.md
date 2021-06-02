@@ -63,20 +63,6 @@ createdb $MY_APP_NAME-test
     Github! Otherwise, _prying eyes_ will find your secret API keys!
   * It might look like this:
 
-```
-process.env.GOOGLE_CLIENT_ID = 'hush hush'
-process.env.GOOGLE_CLIENT_SECRET = 'pretty secret'
-process.env.GOOGLE_CALLBACK = '/auth/google/callback'
-```
-
-### OAuth
-
-* To use OAuth with Google, complete the steps above with a real client
-  ID and client secret supplied from Google
-  * You can get them from the [Google APIs dashboard][google-apis].
-
-[google-apis]: https://console.developers.google.com/apis/credentials
-
 ## Linting
 
 Linters are fundamental to any project. They ensure that your code
