@@ -8,6 +8,7 @@ import Row from 'react-bootstrap/Row'
 import Col from 'react-bootstrap/Col'
 import Button from 'react-bootstrap/Button'
 import {getCurrentUser} from '../store/user'
+import moment from 'moment'
 
 export class UserHome extends React.Component {
   constructor(props) {
@@ -87,7 +88,7 @@ export class UserHome extends React.Component {
                     Location: {event.location}
                   </Card.Body>
                   <Card.Footer>
-                    Date: {event.date}
+                    {moment(event.date).format('MMMM Do YYYY, h:mm a')}
                     <Button
                       className="float-right"
                       as={Link}

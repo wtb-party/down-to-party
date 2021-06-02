@@ -60,5 +60,4 @@ router.get('/me', async (req, res) => {
   res.json(req.user)
 })
 
-router.use('/google', require('./google'))
 router.use('/auth0', require('./auth0'))
