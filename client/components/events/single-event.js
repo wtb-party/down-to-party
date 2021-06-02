@@ -3,44 +3,34 @@ import {connect} from 'react-redux'
 import {withRouter} from 'react-router'
 import Container from 'react-bootstrap/Container'
 import {fetchSingleEvent} from '../../store/single-event'
-import {fetchUsers} from '../../store/users'
 import Card from 'react-bootstrap/Card'
 import Button from 'react-bootstrap/Button'
+import CardDeck from 'react-bootstrap/CardDeck'
 import Tabs from 'react-bootstrap/Tabs'
 import Tab from 'react-bootstrap/Tab'
 import ConfirmationModal from '../util/confirmationModal'
 import {destroyEvent} from '../../store/event'
+import {fetchServices} from '../../store/services'
 
 class SingleEvent extends React.Component {
   constructor(props) {
     super(props)
     this.state = {}
-    this.getServices = this.getServices.bind(this)
-    this.getUserServices = this.getUserServices.bind(this)
   }
   async componentDidMount() {
     const id = parseInt(this.props.match.params.id, 10)
     await this.props.fetchSingleEvent(id)
-    this.props.fetchUsers()
-  }
-  getServices() {
-    const event = this.props.singleEvent
-    if (event) {
-      return event.services
+    const listings = this.props.singleEvent.listings
+    if (listings && listings.length) {
+      const titles = listings.reduce((accum, curr) => {
+        accum.push(`title=${curr.role.title}`)
+        return accum
+      }, [])
+      this.props.fetchServices(titles)
     }
-    return []
-  }
-  getUserServices(userSkills) {
-    const services = this.getServices()
-    const serviceNames = services.reduce((accum, curr) => {
-      accum.push(curr.title)
-      return accum
-    }, [])
-
-    return userSkills.some(({title}) => serviceNames.includes(title))
   }
   render() {
-    const {singleEvent, eventType, users} = this.props
+    const {singleEvent, eventType, services} = this.props
     return (
       <Container>
         <Tabs defaultActiveKey="event" id="event-control">
@@ -51,35 +41,57 @@ class SingleEvent extends React.Component {
             <p>{`This is a: ${
               singleEvent.public ? 'public' : 'private'
             } event`}</p>
-            Pending Services:
-            {singleEvent &&
-            singleEvent.services &&
-            singleEvent.services.length ? (
-              singleEvent.services.map(service => (
-                <div key={service.id}>{service.title}</div>
-              ))
-            ) : (
-              <div>No Services yet</div>
-            )}
           </Tab>
           <Tab eventKey="services" title="Services">
             <br />
             <h3>Search for Service Providers</h3>
-            {users && users.length ? (
-              users.map(user => {
-                if (this.getUserServices(user.skills)) {
-                  return (
-                    <Card key={user.id} style={{marginBottom: 10}}>
-                      <Card.Body>
-                        <Card.Title>{user.email}</Card.Title>
-                        <Button variant="primary">Request a Quote!</Button>
-                      </Card.Body>
-                    </Card>
-                  )
-                }
-              })
+            <br />
+            {singleEvent &&
+            singleEvent.listings &&
+            singleEvent.listings.length ? (
+              singleEvent.listings.map(listing => (
+                <div key={listing.id}>
+                  <h4>
+                    {listing.role.title}{' '}
+                    <span className="gray-small">See all</span>
+                  </h4>
+                  <CardDeck>
+                    {services && services.length ? (
+                      services.map(service => {
+                        if (service.type.title === listing.role.title) {
+                          const {email, photoURL} = service.provider.profile
+                          return (
+                            <Card key={service.id} style={{maxWidth: '16rem'}}>
+                              <Card.Img
+                                variant="top"
+                                src={
+                                  photoURL
+                                    ? photoURL
+                                    : `https://robohash.org/set_set5/bgset_bg1/${email}.png`
+                                }
+                              />
+                              <Card.Body>
+                                <Card.Title>{email}</Card.Title>
+                                <Card.Text>
+                                  Some quick example text to build on the card
+                                  title and make up the bulk of the card's
+                                  content.
+                                </Card.Text>
+                                <Button variant="primary">Request Quote</Button>
+                              </Card.Body>
+                            </Card>
+                          )
+                        }
+                      })
+                    ) : (
+                      <p>No providers found for this service</p>
+                    )}
+                  </CardDeck>
+                  <br />
+                </div>
+              ))
             ) : (
-              <p>No users</p>
+              <div>No Services yet</div>
             )}
           </Tab>
           <Tab eventKey="settings" title="Settings">
@@ -104,13 +116,13 @@ class SingleEvent extends React.Component {
 const mapState = state => ({
   singleEvent: state.singleEvent,
   eventType: state.singleEvent.eventType,
-  users: state.users
+  services: state.services
 })
 
 const mapDispatch = (dispatch, ownProps) => ({
   fetchSingleEvent: id => dispatch(fetchSingleEvent(id)),
-  fetchUsers: () => dispatch(fetchUsers()),
-  destroyEvent: id => dispatch(destroyEvent(id, ownProps.history))
+  destroyEvent: id => dispatch(destroyEvent(id, ownProps.history)),
+  fetchServices: eventListings => dispatch(fetchServices(eventListings))
 })
 
 export default withRouter(connect(mapState, mapDispatch)(SingleEvent))

@@ -1,34 +1,20 @@
 const router = require('express').Router()
-const {Event, Skill, User, EventType} = require('../db/models')
+const {
+  Event,
+  Skill,
+  EventType,
+  Contract,
+  Provider,
+  Service,
+  Listing
+} = require('../db/models')
 module.exports = router
 
 router.get('/', async (req, res, next) => {
   try {
     const events = await Event.findAll({
       where: {public: false},
-      include: [
-        {model: EventType},
-        {model: Skill, as: 'services'},
-        {model: User, as: 'workers'}
-      ]
-    })
-    res.json(events)
-  } catch (err) {
-    next(err)
-  }
-})
-
-router.get('/working/:userId', async (req, res, next) => {
-  try {
-    const events = await Event.findAll({
-      include: [
-        {
-          model: User,
-          as: 'workers',
-          where: {id: req.params.userId}
-        },
-        {model: EventType}
-      ]
+      include: [{model: EventType}, {model: Skill}]
     })
     res.json(events)
   } catch (err) {
@@ -42,8 +28,11 @@ router.get('/:id', async (req, res, next) => {
       where: {id: req.params.id},
       include: [
         {model: EventType},
-        {model: Skill, as: 'services'},
-        {model: User, as: 'workers'}
+        {model: Listing, include: [{model: Skill, as: 'role'}]},
+        {
+          model: Contract,
+          include: [{model: Provider, include: [{model: Service}]}]
+        }
       ]
     })
     res.json(event)
@@ -69,15 +58,16 @@ router.post('/', async (req, res, next) => {
     const {location, eventType, service, userId} = req.body
     const type = await EventType.findOne({where: {name: eventType}})
     const skill = await Skill.findOne({where: {title: service}})
-    const newEvent = await Event.create({location})
+    const newEvent = await Event.create({userId, location})
 
     if (newEvent) {
       await newEvent.setHost(userId)
       await newEvent.setEventType(type)
-      await newEvent.addService(skill)
+      await newEvent.createListing({eventId: newEvent.id, skillId: skill.id})
       res.status(201).json(newEvent)
     }
   } catch (err) {
     console.error(err)
+    next(err)
   }
 })

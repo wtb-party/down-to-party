@@ -19,10 +19,16 @@ const mainNav = ({handleClick, isLoggedIn, userId}) => (
             <Nav.Link as={Link} to="/home">
               Home
             </Nav.Link>
+            <Nav.Link as={Link} to="/providers">
+              Providers
+            </Nav.Link>
+            <Nav.Link as={Link} to="/listings">
+              Listings
+            </Nav.Link>
             <Nav.Link as={Link} to={`/users/${userId}/profile`}>
               Profile
             </Nav.Link>
-            <Nav.Link as={Link} to="/" onClick={handleClick}>
+            <Nav.Link href="/auth/auth0/logout" onClick={handleClick}>
               Logout
             </Nav.Link>
           </>
