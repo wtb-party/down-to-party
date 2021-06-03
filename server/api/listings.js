@@ -7,7 +7,8 @@ router.get('/', async (req, res, next) => {
   try {
     const listings = await Listing.findAll({
       where: {
-        positionsAvailable: {[Op.gt]: 0}
+        positionsAvailable: {[Op.gt]: 0},
+        '$event.public$': true
       },
       attributes: ['id', 'positionsAvailable'],
       include: [
@@ -17,12 +18,30 @@ router.get('/', async (req, res, next) => {
         },
         {
           model: Event,
-          where: {public: true},
           attributes: ['id', 'location', 'date', 'eventTypeId']
         }
       ]
     })
     res.status(200).json(listings)
+  } catch (err) {
+    next(err)
+  }
+})
+
+router.get('/:listingId', async (req, res, next) => {
+  try {
+    const listing = await Listing.findOne({
+      where: {
+        id: req.params.listingId
+      },
+      attributes: ['id', 'positionsAvailable'],
+      include: [{model: Event}, {model: Skill, as: 'role'}]
+    })
+    if (listing) {
+      res.status(200).json(listing)
+    } else {
+      res.sendStatus(404)
+    }
   } catch (err) {
     next(err)
   }

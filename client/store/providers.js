@@ -1,4 +1,5 @@
 import axios from 'axios'
+import queryString from 'query-string'
 
 const SET_PROVIDERS = 'SET_PROVIDERS'
 const SET_PROVIDER = 'SET_PROVIDER'
@@ -19,9 +20,10 @@ const addProvider = provider => ({
   provider
 })
 
-export const fetchProviders = () => async dispatch => {
+export const fetchProviders = filterOptions => async dispatch => {
+  const params = queryString.parse(filterOptions)
   try {
-    const {data} = await axios.get('/api/providers')
+    const {data} = await axios.get('/api/providers', {params})
     dispatch(setProviders(data))
   } catch (err) {
     console.log(err)

@@ -1,4 +1,5 @@
 const router = require('express').Router()
+const {Op} = require('sequelize')
 const {Provider, User, Skill, Service} = require('../db/models')
 module.exports = router
 
@@ -16,6 +17,11 @@ router.post('/new', async (req, res, next) => {
 })
 
 router.get('/', async (req, res, next) => {
+  const searchBySkill = req.query.skill && {id: req.query.skill}
+  const searchByLocation = req.query.location && {
+    location: {[Op.iLike]: `%${req.query.location}%`}
+  }
+
   try {
     const providers = await Provider.findAll({
       where: {
@@ -26,14 +32,17 @@ router.get('/', async (req, res, next) => {
         {
           model: User,
           as: 'profile',
+          where: searchByLocation,
           attributes: ['id', 'location', 'firstName', 'lastName', 'photoURL']
         },
         {
           model: Service,
           attributes: ['id'],
+          required: true,
           include: {
             model: Skill,
-            as: 'type'
+            as: 'type',
+            where: searchBySkill
           }
         }
       ]

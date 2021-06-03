@@ -1,6 +1,7 @@
 import React, {useEffect} from 'react'
 import {useDispatch, useSelector} from 'react-redux'
 import {fetchListings} from '../../store/listings'
+import {Link} from 'react-router-dom'
 import Container from 'react-bootstrap/Container'
 import Card from 'react-bootstrap/Card'
 
@@ -23,7 +24,9 @@ export default function Listings() {
               style={{marginBottom: 10}}
             >
               <Card.Header>
-                <span>{role.title}</span>
+                <span>
+                  <Link to={`/listings/${id}`}>{role.title}</Link>
+                </span>
                 <span className="float-right">
                   {positionsAvailable} position(s) available!
                 </span>
