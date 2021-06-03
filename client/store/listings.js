@@ -13,6 +13,15 @@ export const fetchListings = () => async dispatch => {
   }
 }
 
+export const fetchListing = listingId => async dispatch => {
+  try {
+    const {data} = await axios.get(`/api/listings/${listingId}`)
+    dispatch(setListings(data))
+  } catch (err) {
+    console.log(err)
+  }
+}
+
 export default function listings(state = [], action) {
   switch (action.type) {
     case SET_LISTINGS:

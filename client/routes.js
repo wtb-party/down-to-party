@@ -13,6 +13,7 @@ import {
   EventForm,
   SingleEvent,
   Listings,
+  Listing,
   Skills,
   Skill,
   Provider
@@ -49,7 +50,8 @@ class Routes extends Component {
             <Route exact path="/events" component={Events} />
             <Route path="/events/new" component={EventForm} />
             <Route path="/events/:id" component={SingleEvent} />
-            <Route path="/listings" component={Listings} />
+            <Route exact path="/listings" component={Listings} />
+            <Route path="/listings/:listingId" component={Listing} />
             <Route exact path="/skills" component={Skills} />
             <Route path="/skills/:id" component={Skill} />
           </Switch>
