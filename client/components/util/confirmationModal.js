@@ -5,12 +5,15 @@ import Button from 'react-bootstrap/Button'
 
 export default function ConfirmationModal({
   func,
+  queryFunc,
   buttonVariant,
   buttonText,
   modalHeading,
   modalBody,
   floatRight,
-  id
+  id,
+  quoteBody,
+  confirmationText
 }) {
   const [show, setShow] = useState(false)
 
@@ -18,8 +21,14 @@ export default function ConfirmationModal({
   const handleShow = () => setShow(true)
 
   const handleFunc = () => {
-    func(id)
-    return setShow(false)
+    if (!quoteBody || quoteBody === undefined) {
+      func(id)
+      return setShow(false)
+    } else {
+      func(quoteBody)
+      queryFunc(id)
+      return setShow(false)
+    }
   }
   return (
     <>
@@ -40,7 +49,7 @@ export default function ConfirmationModal({
             Close
           </Button>
           <Button variant={buttonVariant} onClick={handleFunc}>
-            Save Changes
+            {confirmationText}
           </Button>
         </Modal.Footer>
       </Modal>

@@ -11,6 +11,7 @@ import listings from './listings'
 import users from './users'
 import providers from './providers'
 import services from './services'
+import quotes from './quotes'
 
 const reducer = combineReducers({
   user,
@@ -21,7 +22,8 @@ const reducer = combineReducers({
   eventType,
   singleEvent,
   listings,
-  services
+  services,
+  quotes
 })
 const middleware = composeWithDevTools(
   applyMiddleware(thunkMiddleware, createLogger({collapsed: true}))
