@@ -31,6 +31,9 @@ Listing.belongsTo(Skill, {as: 'role', foreignKey: 'skillId'})
 Event.belongsTo(EventType)
 EventType.belongsToMany(Event, {through: 'event_type'})
 
+Quote.hasOne(Contract)
+Contract.belongsTo(Quote)
+
 // User and Skills
 User.belongsToMany(Skill, {through: 'user_skills'})
 Skill.belongsToMany(User, {through: 'user_skills'})
