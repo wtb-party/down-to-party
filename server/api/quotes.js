@@ -63,7 +63,7 @@ router.get('/providerQuotes', async (req, res, next) => {
                 },
                 {
                   model: User,
-                  as: 'Host'
+                  as: 'host'
                 }
               ]
             }

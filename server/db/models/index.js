@@ -18,7 +18,7 @@ const EventStaff = db.define('event_staff', {
 
 // User & Event for "Hosting"
 User.hasMany(Event)
-Event.belongsTo(User, {as: 'Host', foreignKey: 'userId'})
+Event.belongsTo(User, {as: 'host', foreignKey: 'userId'})
 
 // Event & Skill so we don't store a bunch of random services
 Event.belongsToMany(Skill, {through: Listing})

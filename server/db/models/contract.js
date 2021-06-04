@@ -7,6 +7,18 @@ const Contract = db.define('contract', {
     primaryKey: true,
     autoIncrement: true,
     allowNull: false
+  },
+  eventId: {
+    type: Sequelize.INTEGER,
+    allowNull: false
+  },
+  quoteId: {
+    type: Sequelize.INTEGER,
+    allowNull: false
+  },
+  providerId: {
+    type: Sequelize.INTEGER,
+    allowNull: false
   }
 })
 
