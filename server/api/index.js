@@ -9,6 +9,7 @@ router.use('/listings', require('./listings'))
 router.use('/eventTypes', require('./eventTypes'))
 router.use('/services', require('./services'))
 router.use('/quotes', require('./quotes'))
+router.use('/contracts', require('./contracts'))
 router.use((req, res, next) => {
   const error = new Error('Not Found')
   error.status = 404

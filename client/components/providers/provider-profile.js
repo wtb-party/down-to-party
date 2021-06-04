@@ -119,7 +119,7 @@ export default function ProviderProfile({
                 {`for ${quote &&
                   quote.listing &&
                   quote.listing.event &&
-                  quote.listing.event.Host.email}`}
+                  quote.listing.event.host.email}`}
               </span>
               <span className="float-right gray-small">
                 status: {quote.status}

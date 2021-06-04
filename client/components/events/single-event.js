@@ -1,21 +1,23 @@
+/* eslint-disable complexity */
 import React from 'react'
-import {connect} from 'react-redux'
-import {withRouter} from 'react-router'
-import Container from 'react-bootstrap/Container'
-import {fetchSingleEvent} from '../../store/single-event'
 import Card from 'react-bootstrap/Card'
 import CardDeck from 'react-bootstrap/CardDeck'
-import Tabs from 'react-bootstrap/Tabs'
+import Container from 'react-bootstrap/Container'
 import Tab from 'react-bootstrap/Tab'
-import ConfirmationModal from '../util/confirmationModal'
+import Tabs from 'react-bootstrap/Tabs'
+import {connect} from 'react-redux'
+import {withRouter} from 'react-router'
 import {destroyEvent} from '../../store/event'
-import {fetchServices} from '../../store/services'
 import {
-  requestQuote,
   fetchEventQuotes,
+  requestQuote,
   updateQuoteStatus
 } from '../../store/quotes'
-import Button from 'react-bootstrap/Button'
+import {fetchServices} from '../../store/services'
+import {fetchSingleEvent} from '../../store/single-event'
+import CancelContract from '../contracts/cancelContract'
+import CreateContract from '../contracts/createContract'
+import ConfirmationModal from '../util/confirmationModal'
 
 class SingleEvent extends React.Component {
   constructor(props) {
@@ -167,25 +169,17 @@ class SingleEvent extends React.Component {
                       {quote && quote.service && quote.service.rate1Mode}
                     </div>
                     <br />
-                    <Button
-                      onClick={() =>
-                        this.props.updateQuoteStatus(quote.id, 'confirmed')
-                      }
-                      className="float-right"
-                      variant="success"
-                    >
-                      Confirm Booking
-                    </Button>
-                    <Button
-                      onClick={() =>
-                        this.props.updateQuoteStatus(quote.id, 'canceled')
-                      }
-                      className="float-right"
-                      style={{marginRight: 5}}
-                      variant="danger"
-                    >
-                      Cancel
-                    </Button>
+                    <CreateContract
+                      quoteId={quote.id}
+                      quoteStatus={quote.status}
+                      eventId={quote.listing.event.id}
+                      providerId={quote.providerId}
+                    />
+                    <CancelContract
+                      eventId={quote.listing.event.id}
+                      quoteId={quote.id}
+                      providerId={quote.providerId}
+                    />
                   </Card.Body>
                 </Card>
               ))
