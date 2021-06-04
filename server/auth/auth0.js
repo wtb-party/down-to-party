@@ -1,4 +1,5 @@
 const passport = require('passport')
+const {Op} = require('sequelize')
 const router = require('express').Router()
 const Auth0Strategy = require('passport-auth0')
 const {User} = require('../db/models')
@@ -29,8 +30,10 @@ if (!process.env.AUTH0_CLIENT_ID || !process.env.AUTH0_CLIENT_SECRET) {
     const firstName = profile.name.givenName
     const lastName = profile.name.familyName
     User.findOrCreate({
-      where: {auth0Id},
-      defaults: {email, photoURL, firstName, lastName}
+      where: {
+        [Op.or]: [{auth0Id}, {email}]
+      },
+      defaults: {email, photoURL, firstName, lastName, auth0Id}
     }).then(([user]) => done(null, user))
   })
   passport.use(strategy)
