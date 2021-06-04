@@ -1,5 +1,8 @@
-body {
+body,
+html {
   font-family: sans-serif;
+  height: 100%;
+  margin: 0;
 }
 
 a {
@@ -36,4 +39,76 @@ nav a {
 .gray-small {
   font-size: 15px;
   color: gray;
+}
+
+.bg {
+  background-image: url('https://i.ibb.co/ZHNpjR5/valiant-made-Urz-N-8-K1-PCE-unsplash.jpg');
+  height: 100%;
+  display: flex;
+  min-height: 100vh;
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: cover;
+  overflow: hidden;
+  overflow-y: hidden;
+  position: relative;
+}
+
+.auth-heading {
+  background-color: whitesmoke;
+  position: absolute;
+  font-size: 3vw;
+  width: 96%;
+  top: 6%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  border-radius: 5px;
+  -moz-box-shadow: 5px 5px 5px rgba(0, 0, 0, 0.3);
+  -webkit-box-shadow: 5px 5px 5px rgba(0, 0, 0, 0.3);
+  box-shadow: 5px 5px 5px rgba(0, 0, 0, 0.3);
+}
+
+.auth-text {
+  text-align: center;
+  padding: 10px;
+  color: rgb(77, 76, 76);
+  margin: 0;
+}
+
+.auth-info {
+  background-color: whitesmoke;
+  position: absolute;
+  top: 40%;
+  left: 16%;
+  transform: translate(-20%, -20%);
+  border-radius: 5px;
+  padding-top: 20px;
+}
+
+.auth-info-text {
+  color: rgb(77, 76, 76);
+  padding-left: 10px;
+  padding-right: 40px;
+}
+
+.auth0Button {
+  position: absolute;
+  text-align: center;
+  top: 90%;
+  left: 50%;
+  font-size: 18px;
+  transform: translate(-50%, -50%);
+  background-color: #ffcc33;
+  border: none;
+  border-radius: 50px;
+  min-width: 14vw;
+  height: 40px;
+}
+
+.auth0Button:hover {
+  background-color: #ffcc00;
+}
+
+.auth0Button:focus {
+  background-color: #ffcc00 !important;
 }

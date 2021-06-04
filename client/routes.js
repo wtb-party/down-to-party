@@ -2,9 +2,10 @@ import React, {Component} from 'react'
 import {connect} from 'react-redux'
 import {withRouter, Route, Switch, Redirect} from 'react-router-dom'
 import PropTypes from 'prop-types'
+import {Navbar} from './components'
+import Container from 'react-bootstrap/Container'
 import {
   Login,
-  Signup,
   UserHome,
   UserProfile,
   UserForm,
@@ -35,26 +36,35 @@ class Routes extends Component {
       <Switch>
         {/* Routes placed here are available to all visitors */}
         <Route path="/login" component={Login} />
-        <Route path="/signup" component={Signup} />
         {isLoggedIn && (
-          <Switch>
-            {/* Routes placed here are only available after logging in */}
-            <Route exact path="/">
-              <Redirect to="/home" />
-            </Route>
-            <Route path="/home" component={UserHome} />
-            <Route exact path="/users/:id/profile" component={UserProfile} />
-            <Route path="/users/:id/profile/edit" component={UserForm} />
-            <Route exact path="/providers" component={Providers} />
-            <Route path="/providers/:providerId" component={Provider} />
-            <Route exact path="/events" component={Events} />
-            <Route path="/events/new" component={EventForm} />
-            <Route path="/events/:id" component={SingleEvent} />
-            <Route exact path="/listings" component={Listings} />
-            <Route path="/listings/:listingId" component={Listing} />
-            <Route exact path="/skills" component={Skills} />
-            <Route path="/skills/:id" component={Skill} />
-          </Switch>
+          <>
+            <Navbar />
+            <Container className="app-container">
+              <Switch>
+                {/* Routes placed here are only available after logging in */}
+                <Route exact path="/">
+                  <Redirect to="/home" />
+                </Route>
+
+                <Route path="/home" component={UserHome} />
+                <Route
+                  exact
+                  path="/users/:id/profile"
+                  component={UserProfile}
+                />
+                <Route path="/users/:id/profile/edit" component={UserForm} />
+                <Route exact path="/providers" component={Providers} />
+                <Route path="/providers/:providerId" component={Provider} />
+                <Route exact path="/events" component={Events} />
+                <Route path="/events/new" component={EventForm} />
+                <Route path="/events/:id" component={SingleEvent} />
+                <Route exact path="/listings" component={Listings} />
+                <Route path="/listings/:listingId" component={Listing} />
+                <Route exact path="/skills" component={Skills} />
+                <Route path="/skills/:id" component={Skill} />
+              </Switch>
+            </Container>
+          </>
         )}
         {/* Displays our Login component as a fallback */}
         <Route component={Login} />
