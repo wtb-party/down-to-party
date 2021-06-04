@@ -34,10 +34,10 @@ const mainNav = ({handleClick, isLoggedIn, userId}) => (
           </>
         ) : (
           <>
-            <Nav.Link as={Link} to="/login">
+            <Nav.Link as={Link} to="/">
               Login
             </Nav.Link>
-            <Nav.Link as={Link} to="/signup">
+            <Nav.Link as={Link} to="/">
               Sign Up
             </Nav.Link>
           </>

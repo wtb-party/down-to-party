@@ -62,7 +62,7 @@ nav a {
   top: 6%;
   left: 50%;
   transform: translate(-50%, -50%);
-  border-radius: 5px;
+  border-radius: 3px;
   -moz-box-shadow: 5px 5px 5px rgba(0, 0, 0, 0.3);
   -webkit-box-shadow: 5px 5px 5px rgba(0, 0, 0, 0.3);
   box-shadow: 5px 5px 5px rgba(0, 0, 0, 0.3);
@@ -79,15 +79,19 @@ nav a {
   background-color: whitesmoke;
   position: absolute;
   top: 40%;
-  left: 16%;
-  transform: translate(-20%, -20%);
-  border-radius: 5px;
+  left: 2%;
+  right: 98%;
+  width: 40%;
+  max-width: 27%;
+  min-width: 350px;
+  border-radius: 3px;
   padding-top: 20px;
+  transform: translate(0%, -20%);
 }
 
 .auth-info-text {
   color: rgb(77, 76, 76);
-  padding-left: 10px;
+  padding-left: 16px;
   padding-right: 40px;
 }
 
@@ -102,7 +106,8 @@ nav a {
   border: none;
   border-radius: 50px;
   min-width: 14vw;
-  height: 40px;
+  height: 45px;
+  line-height: 32px;
 }
 
 .auth0Button:hover {
@@ -111,4 +116,10 @@ nav a {
 
 .auth0Button:focus {
   background-color: #ffcc00 !important;
+}
+
+@media screen and (max-width: 375px) {
+  .auth-info {
+    display: none;
+  }
 }
