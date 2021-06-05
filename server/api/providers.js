@@ -38,7 +38,6 @@ router.get('/', async (req, res, next) => {
         {
           model: Service,
           attributes: ['id'],
-          required: true,
           include: {
             model: Skill,
             as: 'type',
@@ -88,6 +87,22 @@ router.get('/:providerId', async (req, res, next) => {
       res.status(200).json(provider)
     } else {
       res.sendStatus(404)
+    }
+  } catch (err) {
+    next(err)
+  }
+})
+
+router.put('/:providerId', async (req, res, next) => {
+  try {
+    const provider = await Provider.findByPk(req.params.providerId)
+    if (provider) {
+      req.body.forEach(async edit => {
+        await provider.addService(edit)
+      })
+      res.status(201).json(provider)
+    } else {
+      res.status(500)
     }
   } catch (err) {
     next(err)

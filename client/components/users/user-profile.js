@@ -5,13 +5,10 @@ import Container from 'react-bootstrap/Container'
 import Card from 'react-bootstrap/Card'
 import Media from 'react-bootstrap/Media'
 import Image from 'react-bootstrap/Image'
-import Accordion from 'react-bootstrap/Accordion'
 import Button from 'react-bootstrap/Button'
 
 export default function UserProfile() {
-  const {id, email, photoURL, location, skills} = useSelector(
-    state => state.user
-  )
+  const {id, email, photoURL, location} = useSelector(state => state.user)
 
   return (
     <Container>
@@ -36,30 +33,7 @@ export default function UserProfile() {
             {location ? location : "You haven't specified a location"}
           </Media.Body>
         </Media>
-        <div>
-          <Accordion style={{marginBottom: 10}}>
-            <Card>
-              <Accordion.Toggle as={Card.Header} eventKey="0">
-                Search for events that are in need of your skills:
-              </Accordion.Toggle>
-              <Accordion.Collapse eventKey="0">
-                <Card.Body className="user-profile p-0">
-                  {skills && skills.length ? (
-                    skills.map(skill => (
-                      <Card key={skill.id}>
-                        <Card.Body>
-                          <Link to={`/skills/${skill.id}`}>{skill.title}</Link>
-                        </Card.Body>
-                      </Card>
-                    ))
-                  ) : (
-                    <p>Loading...</p>
-                  )}
-                </Card.Body>
-              </Accordion.Collapse>
-            </Card>
-          </Accordion>
-        </div>
+        <div />
         <div>
           <Button
             className="float-right"
