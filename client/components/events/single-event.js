@@ -169,17 +169,25 @@ class SingleEvent extends React.Component {
                       {quote && quote.service && quote.service.rate1Mode}
                     </div>
                     <br />
-                    <CreateContract
-                      quoteId={quote.id}
-                      quoteStatus={quote.status}
-                      eventId={quote.listing.event.id}
-                      providerId={quote.providerId}
-                    />
-                    <CancelContract
-                      eventId={quote.listing.event.id}
-                      quoteId={quote.id}
-                      providerId={quote.providerId}
-                    />
+                    {quote &&
+                      quote.listing &&
+                      quote.listing.event && (
+                        <>
+                          <CreateContract
+                            quoteId={quote.id}
+                            quoteStatus={quote.status}
+                            eventId={quote.listing.event.id}
+                            provider={quote.provider}
+                            service={quote.service}
+                          />
+                          <CancelContract
+                            eventId={quote.listing.event.id}
+                            quoteId={quote.id}
+                            providerId={quote.providerId}
+                            quoteStatus={quote.status}
+                          />
+                        </>
+                      )}
                   </Card.Body>
                 </Card>
               ))

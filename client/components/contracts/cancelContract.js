@@ -4,12 +4,19 @@ import {updateQuoteStatus} from '../../store/quotes'
 import {deleteContract} from '../../store/contracts'
 import Button from 'react-bootstrap/Button'
 
-export default function CancelContract({eventId, quoteId, providerId}) {
+export default function CancelContract({
+  eventId,
+  quoteId,
+  providerId,
+  quoteStatus
+}) {
   const dispatch = useDispatch()
 
   const handleCancelContract = () => {
     dispatch(updateQuoteStatus(quoteId, 'canceled'))
-    dispatch(deleteContract({eventId, quoteId, providerId}))
+    if (quoteStatus === 'confirmed') {
+      dispatch(deleteContract({eventId, quoteId, providerId}))
+    }
   }
 
   return (
