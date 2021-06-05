@@ -19,6 +19,9 @@ const Quote = db.define('quote', {
     type: Sequelize.INTEGER,
     allowNull: false
   },
+  duration: {
+    type: Sequelize.FLOAT
+  },
   status: {
     type: Sequelize.ENUM(
       'pending',

@@ -11,7 +11,7 @@ import Spinner from 'react-bootstrap/Spinner'
 
 export default function CreateContract({
   eventId,
-  quoteId,
+  quote,
   quoteStatus,
   provider,
   service
@@ -43,15 +43,24 @@ export default function CreateContract({
     if (!error) {
       try {
         const {id} = paymentMethod
-        const response = await axios.post('/api/payments', {
-          amount: 999,
-          id: id
-        })
+        let response
+        if (quote && quote.duration && service && service.rate1) {
+          response = await axios.post('/api/payments', {
+            amount: quote.duration * service.rate1 * 100,
+            id: id
+          })
+        }
 
         if (response.data.success) {
           console.log('CheckoutForm.js 25 | payment successful!')
-          dispatch(updateQuoteStatus(quoteId, 'confirmed'))
-          dispatch(createContract({eventId, quoteId, providerId: provider.id}))
+          dispatch(updateQuoteStatus(quote.id, 'confirmed'))
+          dispatch(
+            createContract({
+              eventId,
+              quoteId: quote.id,
+              providerId: provider.id
+            })
+          )
           setPaymentMessage(response.data.message)
           setAlertVariant('success')
           setIsProcessing(false)
@@ -117,7 +126,11 @@ export default function CreateContract({
               (!!paymentMessage && !paymentMessage.endsWith('Failed'))
             }
           >
-            {isProcessing ? <Spinner animation="border" size="sm" /> : 'Pay'}
+            {isProcessing ? (
+              <Spinner animation="border" size="sm" />
+            ) : (
+              `$${quote.duration * service.rate1}`
+            )}
           </Button>
         </Modal.Footer>
       </Modal>
