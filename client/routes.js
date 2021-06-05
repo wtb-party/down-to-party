@@ -1,23 +1,23 @@
-import React, {Component} from 'react'
-import {connect} from 'react-redux'
-import {withRouter, Route, Switch, Redirect} from 'react-router-dom'
 import PropTypes from 'prop-types'
-import {Navbar} from './components'
+import React, {Component} from 'react'
 import Container from 'react-bootstrap/Container'
+import {connect} from 'react-redux'
+import {Redirect, Route, Switch, withRouter} from 'react-router-dom'
 import {
-  Login,
-  UserHome,
-  UserProfile,
-  UserForm,
-  Providers,
-  Events,
   EventForm,
-  SingleEvent,
-  Listings,
+  Events,
   Listing,
-  Skills,
+  Listings,
+  Login,
+  Navbar,
+  Provider,
+  Providers,
+  SingleEvent,
   Skill,
-  Provider
+  Skills,
+  UserForm,
+  UserHome,
+  UserProfile
 } from './components'
 import {me} from './store'
 
