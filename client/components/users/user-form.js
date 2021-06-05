@@ -7,14 +7,14 @@ import Card from 'react-bootstrap/Card'
 import Media from 'react-bootstrap/Media'
 import Image from 'react-bootstrap/Image'
 import Form from 'react-bootstrap/Form'
-import Accordion from 'react-bootstrap/Accordion'
 import Button from 'react-bootstrap/Button'
 import Row from 'react-bootstrap/Row'
 import Tab from 'react-bootstrap/Tab'
 import Col from 'react-bootstrap/Col'
 import Nav from 'react-bootstrap/Nav'
-import {createProvider} from '../../store/providers'
+import {createProvider, updateProvider} from '../../store/providers'
 import {Link} from 'react-router-dom'
+import Toggles from '../util/toggles'
 
 export default function UserForm({history}) {
   const dispatch = useDispatch()
@@ -52,18 +52,16 @@ export default function UserForm({history}) {
     })
   }
 
-  const handleSwitch = (e, skill) => {
+  const handleSwitch = e => {
     const id = parseInt(e.target.id, 10)
     if (skillIds.includes(id)) {
-      user.skills = user.skills.filter(userSkill => skill.id !== userSkill.id)
       setSkillIds(skillIds.filter(skillId => skillId !== id))
     } else {
-      user.skills = [...user.skills, skill]
       setSkillIds([...skillIds, id])
     }
   }
 
-  const handleSubmit = e => {
+  const handleUserUpdate = e => {
     e.preventDefault()
 
     if (inputs.photoURL === '') inputs.photoURL = user.photoURL
@@ -72,8 +70,7 @@ export default function UserForm({history}) {
     dispatch(
       updateUser(
         {
-          ...inputs,
-          skillIds
+          ...inputs
         },
         user.id
       )
@@ -84,6 +81,12 @@ export default function UserForm({history}) {
 
   const handleCreateProvider = userId => {
     dispatch(createProvider(userId, history))
+  }
+
+  const handleProviderUpdate = e => {
+    console.log('providerId', user.provider.id)
+    e.preventDefault()
+    dispatch(updateProvider(skillIds, user.provider.id))
   }
 
   return (
@@ -150,38 +153,8 @@ export default function UserForm({history}) {
                     </Media.Body>
                   </Media>
                   <div>
-                    <Accordion style={{marginBottom: 10}}>
-                      <Card>
-                        <Accordion.Toggle as={Card.Header} eventKey="0">
-                          Select skills to track jobs...
-                        </Accordion.Toggle>
-                        <Accordion.Collapse eventKey="0">
-                          <Card.Body className="user-form p-0">
-                            {skills && skills.length ? (
-                              skills.map(skill => (
-                                <Card key={skill.id}>
-                                  <Card.Body>
-                                    {skill.title}
-                                    <Form.Switch
-                                      id={skill.id}
-                                      className="float-right"
-                                      checked={skillIds.includes(skill.id)}
-                                      onChange={e => handleSwitch(e, skill)}
-                                    />
-                                  </Card.Body>
-                                </Card>
-                              ))
-                            ) : (
-                              <p>Loading...</p>
-                            )}
-                          </Card.Body>
-                        </Accordion.Collapse>
-                      </Card>
-                    </Accordion>
-                  </div>
-                  <div>
                     <Button
-                      onClick={e => handleSubmit(e)}
+                      onClick={e => handleUserUpdate(e)}
                       className="float-right"
                       variant="success"
                     >
@@ -195,6 +168,32 @@ export default function UserForm({history}) {
                   {user && user.provider && user.provider.id ? (
                     <>
                       <div>Your Provider account is active!</div>
+                      <Form>
+                        <Row>
+                          {skills && skills.length
+                            ? skills.map(skill => (
+                                <Col xs={12} sm={6} md={4} key={skill.id}>
+                                  <Card style={{marginBottom: 5}}>
+                                    <Card.Body style={{padding: 10}}>
+                                      {skill.title}
+                                      <Toggles
+                                        skill={skill}
+                                        skillIds={skillIds}
+                                        handleSwitch={handleSwitch}
+                                      />
+                                    </Card.Body>
+                                  </Card>
+                                </Col>
+                              ))
+                            : false}
+                        </Row>
+                        <Button
+                          onClick={e => handleProviderUpdate(e)}
+                          variant="success"
+                        >
+                          Save Changes
+                        </Button>
+                      </Form>
                       <br />
                       <Button as={Link} to={`/providers/${user.provider.id}`}>
                         Public Provider Page

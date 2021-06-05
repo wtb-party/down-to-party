@@ -34,10 +34,6 @@ EventType.belongsToMany(Event, {through: 'event_type'})
 Quote.hasOne(Contract)
 Contract.belongsTo(Quote)
 
-// User and Skills
-User.belongsToMany(Skill, {through: 'user_skills'})
-Skill.belongsToMany(User, {through: 'user_skills'})
-
 // api/v2
 User.hasOne(Provider)
 Provider.belongsTo(User, {as: 'profile', foreignKey: 'userId'})

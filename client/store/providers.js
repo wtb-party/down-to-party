@@ -45,6 +45,15 @@ export const createProvider = (userId, history) => async dispatch => {
   history.push(`/providers/${data.id}`)
 }
 
+export const updateProvider = (edits, providerId) => async dispatch => {
+  try {
+    const {data} = await axios.put(`/api/providers/${providerId}`, edits)
+    dispatch(setProvider(data))
+  } catch (err) {
+    console.error(err)
+  }
+}
+
 export default function providers(state = [], action) {
   switch (action.type) {
     case SET_PROVIDERS:
@@ -52,7 +61,7 @@ export default function providers(state = [], action) {
     case SET_PROVIDER:
       return action.provider
     case ADD_PROVIDER:
-      return [...state, action.event]
+      return [...state, action.provider]
     default:
       return state
   }
