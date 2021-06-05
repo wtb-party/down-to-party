@@ -174,7 +174,7 @@ class SingleEvent extends React.Component {
                       quote.listing.event && (
                         <>
                           <CreateContract
-                            quoteId={quote.id}
+                            quote={quote}
                             quoteStatus={quote.status}
                             eventId={quote.listing.event.id}
                             provider={quote.provider}
