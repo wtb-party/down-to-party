@@ -123,7 +123,7 @@ async function bootApp() {
     await syncDb()
     await createApp()
     await startListening()
-  } catch (erro) {
+  } catch (err) {
     console.error(err)
   }
 }
