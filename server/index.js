@@ -63,6 +63,7 @@ const createApp = () => {
   app.use(session(sess))
   if (app.get('env') === 'production') {
     // Serve secure cookies, requires HTTPS
+    app.set('trust proxy', 1)
     sess.cookie.secure = true
   }
   app.use(passport.initialize())
