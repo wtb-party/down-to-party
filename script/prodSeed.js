@@ -12,7 +12,7 @@ const {
   Quote
 } = require('../server/db/models')
 
-async function seed() {
+async function prodSeed() {
   await db.sync({force: true})
 
   await Skill.bulkCreate([
@@ -62,7 +62,7 @@ async function seed() {
 async function runSeed() {
   console.log('seeding...')
   try {
-    await seed()
+    await prodSeed()
   } catch (err) {
     console.error(err)
     process.exitCode = 1
@@ -72,3 +72,9 @@ async function runSeed() {
     console.log('db connection closed')
   }
 }
+
+if (module === require.main) {
+  runSeed()
+}
+
+module.exports = prodSeed
