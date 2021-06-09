@@ -57,7 +57,7 @@ const createApp = () => {
     session({
       secret: process.env.SESSION_SECRET || 'my best friend is Cody',
       store: sessionStore,
-      cookie: {},
+      cookie: {secure: false},
       resave: false,
       saveUninitialized: false
     })
@@ -119,10 +119,14 @@ const startListening = () => {
 const syncDb = () => db.sync()
 
 async function bootApp() {
-  await sessionStore.sync()
-  await syncDb()
-  await createApp()
-  await startListening()
+  try {
+    await sessionStore.sync()
+    await syncDb()
+    await createApp()
+    await startListening()
+  } catch (err) {
+    console.error(err)
+  }
 }
 // This evaluates as true when this file is run directly from the command line,
 // i.e. when we say 'node server/index.js' (or 'nodemon server/index.js', or 'nodemon server', etc)
