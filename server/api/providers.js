@@ -1,6 +1,5 @@
 const router = require('express').Router()
 const {Op} = require('sequelize')
-const cors = require('cors')
 const {Provider, User, Skill, Service} = require('../db/models')
 require('dotenv').config()
 const stripe = require('stripe')(process.env.STRIPE_SECRET_KEY)
