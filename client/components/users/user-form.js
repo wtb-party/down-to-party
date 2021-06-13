@@ -15,6 +15,7 @@ import Nav from 'react-bootstrap/Nav'
 import {createProvider, updateProvider} from '../../store/providers'
 import {Link} from 'react-router-dom'
 import Toggles from '../util/toggles'
+import Spinner from 'react-bootstrap/Spinner'
 
 export default function UserForm({history}) {
   const dispatch = useDispatch()
@@ -25,11 +26,13 @@ export default function UserForm({history}) {
 
   const user = useSelector(state => state.user)
   const skills = useSelector(state => state.skills)
+  const providers = useSelector(state => state.providers)
   const [inputs, setInputs] = useState({
     photoURL: '',
     location: ''
   })
   const [skillIds, setSkillIds] = useState([])
+  const [loading, setLoading] = useState(false)
 
   useEffect(
     () => {
@@ -43,6 +46,15 @@ export default function UserForm({history}) {
       }
     },
     [user]
+  )
+
+  useEffect(
+    () => {
+      if (providers && providers[0] && providers[0].url) {
+        window.location.href = providers[0].url
+      }
+    },
+    [providers[0]]
   )
 
   const handleInput = e => {
@@ -80,6 +92,7 @@ export default function UserForm({history}) {
   }
 
   const handleCreateProvider = userId => {
+    setLoading(true)
     dispatch(createProvider(userId, history))
   }
 
@@ -206,8 +219,13 @@ export default function UserForm({history}) {
                         onClick={() => handleCreateProvider(user.id)}
                         className="float-right"
                         variant="success"
+                        disabled={loading}
                       >
-                        Create a Provider Account!
+                        {loading ? (
+                          <Spinner animation="border" size="sm" />
+                        ) : (
+                          `Create a Provider Account!`
+                        )}
                       </Button>
                     </>
                   )}

@@ -1,17 +1,43 @@
 const router = require('express').Router()
 const {Op} = require('sequelize')
+const cors = require('cors')
 const {Provider, User, Skill, Service} = require('../db/models')
+require('dotenv').config()
+const stripe = require('stripe')(process.env.STRIPE_SECRET_KEY)
 module.exports = router
 
-router.post('/new', async (req, res, next) => {
+router.post('/new-stripe-provider', async (req, res, next) => {
   try {
-    const {userId} = req.body
-    const provider = await Provider.create({
-      userId,
-      isActive: true
+    const account = await stripe.accounts.create({
+      country: 'US',
+      type: 'express',
+      capabilities: {
+        card_payments: {
+          requested: true
+        },
+        transfers: {
+          requested: true
+        }
+      }
     })
-    provider ? res.status(201).json(provider) : res.sendStatus(500)
+
+    const accountLink = await stripe.accountLinks.create({
+      account: account.id,
+      success_url: 'http://localhost:8080/',
+      failure_url: 'http://localhost:8080?failure',
+      type: 'account_onboarding'
+    })
+
+    const {userId} = req.body
+    await Provider.create({
+      userId,
+      isActive: true,
+      stripeId: account.id
+    })
+
+    accountLink.url ? res.json({url: accountLink.url}) : res.sendStatus(500)
   } catch (err) {
+    console.error(err)
     next(err)
   }
 })
