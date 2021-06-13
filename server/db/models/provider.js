@@ -10,6 +10,9 @@ const Provider = db.define('provider', {
     type: Sequelize.BOOLEAN,
     defaultValue: false,
     allowNull: false
+  },
+  stripeId: {
+    type: Sequelize.STRING
   }
 })
 

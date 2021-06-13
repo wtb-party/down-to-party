@@ -39,10 +39,11 @@ export const fetchProvider = providerId => async dispatch => {
   }
 }
 
-export const createProvider = (userId, history) => async dispatch => {
-  const {data} = await axios.post('/api/providers/new', {userId})
+export const createProvider = userId => async dispatch => {
+  const {data} = await axios.post('/api/providers/new-stripe-provider', {
+    userId
+  })
   dispatch(addProvider(data))
-  history.push(`/providers/${data.id}`)
 }
 
 export const updateProvider = (edits, providerId) => async dispatch => {
