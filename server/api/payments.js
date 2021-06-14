@@ -4,17 +4,20 @@ const stripe = require('stripe')(process.env.STRIPE_SECRET_KEY)
 module.exports = router
 
 router.post('/', async (req, res) => {
-  let {amount, id} = req.body
-  console.log('stripe-routes.js 10 | amount and id', amount, id)
+  let {amount, id, stripeId} = req.body
   try {
-    /* const payment =  */ await stripe.paymentIntents.create({
+    await stripe.paymentIntents.create({
       amount: amount,
       currency: 'USD',
-      description: 'Your Company Description',
+      description: 'Huddle, Inc',
       payment_method: id,
-      confirm: true
+      confirm: true,
+      application_fee_amount: amount / 100 * 30,
+      transfer_data: {
+        destination: stripeId
+      }
     })
-    // console.log('stripe-routes.js 19 | payment', payment)
+
     res.json({
       message: 'Payment Successful',
       success: true
