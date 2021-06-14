@@ -47,7 +47,8 @@ export default function CreateContract({
         if (quote && quote.duration && service && service.rate1) {
           response = await axios.post('/api/payments', {
             amount: quote.duration * service.rate1 * 100,
-            id: id
+            id: id,
+            stripeId: provider.stripeId
           })
         }
 
