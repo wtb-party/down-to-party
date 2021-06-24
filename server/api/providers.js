@@ -3,10 +3,12 @@ const {Op} = require('sequelize')
 const {Provider, User, Skill, Service} = require('../db/models')
 require('dotenv').config()
 const stripe = require('stripe')(process.env.STRIPE_SECRET_KEY)
+const providerUrl = process.env.STRIPE_PROVIDER_CALLBACK_URL
 module.exports = router
 
 router.post('/new-stripe-provider', async (req, res, next) => {
   try {
+    const {userId} = req.body
     const account = await stripe.accounts.create({
       country: 'US',
       type: 'express',
@@ -22,12 +24,11 @@ router.post('/new-stripe-provider', async (req, res, next) => {
 
     const accountLink = await stripe.accountLinks.create({
       account: account.id,
-      success_url: 'http://localhost:8080/',
+      success_url: `${providerUrl}/${userId}/profile/edit`,
       failure_url: 'http://localhost:8080?failure',
       type: 'account_onboarding'
     })
 
-    const {userId} = req.body
     await Provider.create({
       userId,
       isActive: true,
