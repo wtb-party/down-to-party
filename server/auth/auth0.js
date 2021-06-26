@@ -34,8 +34,14 @@ if (!process.env.AUTH0_CLIENT_ID || !process.env.AUTH0_CLIENT_SECRET) {
         [Op.or]: [{auth0Id}, {email}]
       },
       defaults: {email, photoURL, firstName, lastName, auth0Id}
-    }).then(([user]) => done(null, user))
+    }).then(([user]) => {
+      if (!user.auth0Id) {
+        user.update({auth0Id})
+      }
+      done(null, user)
+    })
   })
+
   passport.use(strategy)
 
   router.get(

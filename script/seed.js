@@ -42,54 +42,46 @@ async function seed() {
   await User.bulkCreate([
     {
       email: 'cody@email.com',
-      password: '123',
       location: 'Chicago, IL',
       firstName: 'Cody',
       lastName: 'Brody'
     },
     {
       email: 'murphy@email.com',
-      password: '123',
       firstName: 'Murphy',
       lastName: 'Wurphy'
     },
     {
       email: 'deadmau5@email.com',
-      password: '123',
       location: 'Toronto, ON',
       firstName: 'Joel',
       lastName: 'Zimmerman'
     },
     {
       email: 'diplo@email.com',
-      password: '123',
       firstName: 'Major',
       lastName: 'Lazer'
     },
     {
       email: 'genefarris@email.com',
-      password: '123',
       location: 'Chicago, IL',
       firstName: 'Gene',
       lastName: 'Farris'
     },
     {
       email: 'giada@email.com',
-      password: '123',
       location: 'Los Angeles, CA',
       firstName: 'Giada',
       lastName: 'De Laurentiis'
     },
     {
       email: 'tyler@email.com',
-      password: '123',
       location: 'San Francisco, CA',
       firstName: 'Tyler',
       lastName: 'Florence'
     },
     {
       email: 'amouranth@email.com',
-      password: '123',
       location: 'Houston, TX',
       firstName: 'Kaitlyn',
       lastName: 'Siragusa'
@@ -97,14 +89,12 @@ async function seed() {
     // Planner only
     {
       email: 'fungi@email.com',
-      password: '123',
       location: 'Mundelein, IL',
       firstName: 'Maitake',
       lastName: 'Mushroom'
     },
     {
       email: 'GigSaladSpy@email.com',
-      password: '123',
       firstName: 'TotallyNot',
       lastName: 'ASpy'
     }
