@@ -2,9 +2,11 @@ const path = require('path')
 const express = require('express')
 const morgan = require('morgan')
 const compression = require('compression')
-const session = require('express-session')
+const expressSession = require('express-session')
 const passport = require('passport')
-const SequelizeStore = require('connect-session-sequelize')(session.Store)
+const SequelizeStore = require('connect-session-sequelize')(
+  expressSession.Store
+)
 const db = require('./db')
 const sessionStore = new SequelizeStore({db})
 const PORT = process.env.PORT || 8080
@@ -19,14 +21,6 @@ if (process.env.NODE_ENV === 'test') {
   after('close the session store', () => sessionStore.stopExpiringSessions())
 }
 
-/**
- * In your development environment, you can keep all of your
- * app's secret API keys in a file called `secrets.js`, in your project
- * root. This file is included in the .gitignore - it will NOT be tracked
- * or show up on Github. On your production server, you can add these
- * keys as environment variables, so that they can still be read by the
- * Node process on process.env
- */
 if (process.env.NODE_ENV !== 'production') require('../secrets')
 
 // passport registration
@@ -34,7 +28,7 @@ passport.serializeUser((user, done) => done(null, user))
 
 passport.deserializeUser(async (user, done) => {
   try {
-    const u = await db.models.user.findByPk(user.id)
+    const u = await db.models.user.findOne({where: {auth0Id: user.auth0Id}})
     done(null, u)
   } catch (err) {
     done(err)
@@ -53,18 +47,18 @@ const createApp = () => {
   app.use(compression())
 
   // session middleware with passport
-  const sess = {
-    secret: process.env.SESSION_SECRET || 'my best friend is Cody',
+  const session = {
+    secret: process.env.SESSION_SECRET || 'my best friend is huddle shuttle',
     store: sessionStore,
     cookie: {},
     resave: false,
     saveUninitialized: false
   }
-  app.use(session(sess))
+  app.use(expressSession(session))
   if (app.get('env') === 'production') {
     // Serve secure cookies, requires HTTPS
     app.set('trust proxy', 1)
-    sess.cookie.secure = true
+    session.cookie.secure = true
   }
   app.use(passport.initialize())
   app.use(passport.session())
