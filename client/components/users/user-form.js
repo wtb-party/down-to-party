@@ -1,31 +1,27 @@
-import React, {useState, useEffect} from 'react'
-import {useSelector, useDispatch} from 'react-redux'
-import {fetchAllSkills} from '../../store/skill'
-import {updateUser} from '../../store/user'
-import Container from 'react-bootstrap/Container'
-import Card from 'react-bootstrap/Card'
-import Media from 'react-bootstrap/Media'
-import Image from 'react-bootstrap/Image'
-import Form from 'react-bootstrap/Form'
+import React, {useEffect, useState} from 'react'
 import Button from 'react-bootstrap/Button'
-import Row from 'react-bootstrap/Row'
-import Tab from 'react-bootstrap/Tab'
+import Card from 'react-bootstrap/Card'
 import Col from 'react-bootstrap/Col'
+import Container from 'react-bootstrap/Container'
+import Form from 'react-bootstrap/Form'
+import Image from 'react-bootstrap/Image'
+import Media from 'react-bootstrap/Media'
 import Nav from 'react-bootstrap/Nav'
-import {createProvider, updateProvider} from '../../store/providers'
-import {Link} from 'react-router-dom'
-import Toggles from '../util/toggles'
+import Row from 'react-bootstrap/Row'
 import Spinner from 'react-bootstrap/Spinner'
+import Tab from 'react-bootstrap/Tab'
+import {useDispatch, useSelector} from 'react-redux'
+import {Link} from 'react-router-dom'
+import {createProvider, updateProvider} from '../../store/providers'
+import {fetchSkills} from '../../store/skill'
+import {updateUser} from '../../store/user'
+import Toggles from '../util/toggles'
 
 export default function UserForm({history}) {
   const dispatch = useDispatch()
-
-  useEffect(() => {
-    dispatch(fetchAllSkills())
-  }, [])
-
   const user = useSelector(state => state.user)
-  const skills = useSelector(state => state.skills)
+  const skills = useSelector(state => state.skills.skills)
+  const skillStatus = useSelector(state => state.skills.status)
   const providers = useSelector(state => state.providers)
   const [inputs, setInputs] = useState({
     photoURL: '',
@@ -33,6 +29,12 @@ export default function UserForm({history}) {
   })
   const [skillIds, setSkillIds] = useState([])
   const [loading, setLoading] = useState(false)
+
+  useEffect(() => {
+    if (skillStatus === 'idle') {
+      dispatch(fetchSkills())
+    }
+  }, [])
 
   useEffect(
     () => {

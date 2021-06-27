@@ -1,36 +1,29 @@
+import {createAsyncThunk, createSlice} from '@reduxjs/toolkit'
 import axios from 'axios'
+import status from './statusUtils'
 
-const GET_ALL_SKILLS = 'GET_ALL_SKILLS'
-const SET_SKILL = 'SET_SKILL'
+export const fetchSkills = createAsyncThunk('skills/fetchSkills', async () => {
+  const {data} = await axios.get('/api/skills')
+  return data
+})
 
-const getAllSkills = skills => ({type: GET_ALL_SKILLS, skills})
-const setSkill = skill => ({type: SET_SKILL, skill})
-
-export const fetchAllSkills = () => async dispatch => {
-  try {
-    const {data} = await axios.get('/api/skills')
-    dispatch(getAllSkills(data))
-  } catch (err) {
-    console.log(err)
+const skillsSlice = createSlice({
+  name: 'skills',
+  initialState: {skills: [], status: 'idle', error: null},
+  reducers: {},
+  extraReducers: {
+    [fetchSkills.pending]: state => {
+      state.status = status.loading
+    },
+    [fetchSkills.fulfilled]: (state, action) => {
+      state.status = status.succeeded
+      state.skills = state.skills.concat(action.payload)
+    },
+    [fetchSkills.rejected]: (state, action) => {
+      state.status = status.failed
+      state.error = action.error.message
+    }
   }
-}
+})
 
-export const fetchSkill = id => async dispatch => {
-  try {
-    const {data} = await axios.get(`/api/skills/${id}`)
-    dispatch(setSkill(data))
-  } catch (err) {
-    console.log(err)
-  }
-}
-
-export default function skillsReducer(state = [], action) {
-  switch (action.type) {
-    case GET_ALL_SKILLS:
-      return action.skills
-    case SET_SKILL:
-      return action.skill
-    default:
-      return state
-  }
-}
+export default skillsSlice.reducer

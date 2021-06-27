@@ -2,7 +2,7 @@ import {configureStore} from '@reduxjs/toolkit'
 import {createLogger} from 'redux-logger'
 import contracts from './contracts'
 import event from './event'
-import eventType from './eventType'
+import eventTypes from './eventTypes'
 import listings from './listings'
 import providers from './providers'
 import quotes from './quotes'
@@ -20,7 +20,7 @@ export default configureStore({
     providers,
     skills,
     event,
-    eventType,
+    eventTypes,
     singleEvent,
     listings,
     services,
