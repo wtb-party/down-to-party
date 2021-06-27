@@ -1,22 +1,23 @@
-import React, {useEffect, useState} from 'react'
-import {useDispatch, useSelector} from 'react-redux'
-import {fetchAllSkills} from '../../store/skill'
-import {fetchProviders} from '../../store/providers'
 import queryString from 'query-string'
-import {Link} from 'react-router-dom'
-import Container from 'react-bootstrap/Container'
-import Row from 'react-bootstrap/Row'
-import Col from 'react-bootstrap/Col'
-import Card from 'react-bootstrap/Card'
-import Media from 'react-bootstrap/Media'
-import Image from 'react-bootstrap/Image'
-import Form from 'react-bootstrap/Form'
+import React, {useEffect, useState} from 'react'
 import Button from 'react-bootstrap/Button'
+import Card from 'react-bootstrap/Card'
+import Col from 'react-bootstrap/Col'
+import Container from 'react-bootstrap/Container'
+import Form from 'react-bootstrap/Form'
+import Image from 'react-bootstrap/Image'
+import Media from 'react-bootstrap/Media'
+import Row from 'react-bootstrap/Row'
+import {useDispatch, useSelector} from 'react-redux'
+import {Link} from 'react-router-dom'
+import {fetchProviders} from '../../store/providers'
+import {fetchSkills} from '../../store/skill'
 
 export default function Providers({history, location}) {
   const dispatch = useDispatch()
   const providers = useSelector(state => state.providers)
-  const skills = useSelector(state => state.skills)
+  const skills = useSelector(state => state.skills.skills)
+  const skillStatus = useSelector(state => state.skills.status)
   const [locationInput, setLocationInput] = useState('')
   const [skillIds, setSkillIds] = useState([])
 
@@ -28,7 +29,9 @@ export default function Providers({history, location}) {
   )
 
   useEffect(() => {
-    dispatch(fetchAllSkills())
+    if (skillStatus === 'idle') {
+      dispatch(fetchSkills())
+    }
   }, [])
 
   const handleLocationInput = e => {

@@ -1,13 +1,12 @@
 import React from 'react'
-import {fetchAllSkills} from '../../store/skill'
-import {connect} from 'react-redux'
-import {withRouter} from 'react-router'
-import Form from 'react-bootstrap/Form'
 import Button from 'react-bootstrap/Button'
 import Container from 'react-bootstrap/Container'
-import {fetchAllEventTypes} from '../../store/eventType'
+import Form from 'react-bootstrap/Form'
+import {connect} from 'react-redux'
+import {withRouter} from 'react-router'
 import {createEvent} from '../../store/event'
-
+import {fetchEventTypes} from '../../store/eventTypes'
+import {fetchSkills} from '../../store/skill'
 class EventForm extends React.Component {
   constructor(props) {
     super(props)
@@ -20,8 +19,13 @@ class EventForm extends React.Component {
     this.handleChange = this.handleChange.bind(this)
   }
   componentDidMount() {
-    this.props.fetchAllSkills()
-    this.props.fetchAllEventTypes()
+    const {skillStatus, eventTypeStatus} = this.props
+    if (skillStatus === 'idle') {
+      this.props.fetchSkills()
+    }
+    if (eventTypeStatus === 'idle') {
+      this.props.fetchEventTypes()
+    }
   }
   handleChange(evt) {
     evt.preventDefault()
@@ -89,13 +93,15 @@ class EventForm extends React.Component {
 
 const mapState = state => ({
   userId: state.user.id,
-  skills: state.skills,
-  eventTypes: state.eventType
+  skills: state.skills.skills,
+  eventTypes: state.eventTypes.eventTypes,
+  skillStatus: state.skills.status,
+  eventTypeStatus: state.eventTypes.status
 })
 
 const mapDispatch = (dispatch, ownProps) => ({
-  fetchAllSkills: () => dispatch(fetchAllSkills()),
-  fetchAllEventTypes: () => dispatch(fetchAllEventTypes()),
+  fetchSkills: () => dispatch(fetchSkills()),
+  fetchEventTypes: () => dispatch(fetchEventTypes()),
   createEvent: event => dispatch(createEvent(event, ownProps.history))
 })
 
