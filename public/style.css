@@ -41,6 +41,15 @@ nav a {
   color: gray;
 }
 
+.loader-v1 {
+  position: absolute;
+  text-align: center;
+  top: 50%;
+  left: 50%;
+  font-size: 24px;
+  transform: translate(-50%, -50%);
+}
+
 .bg {
   background-image: url('https://i.ibb.co/ZHNpjR5/valiant-made-Urz-N-8-K1-PCE-unsplash.jpg');
   height: 100%;
