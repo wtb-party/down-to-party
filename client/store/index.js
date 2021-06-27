@@ -1,36 +1,33 @@
-import {createStore, combineReducers, applyMiddleware} from 'redux'
+import {configureStore} from '@reduxjs/toolkit'
 import {createLogger} from 'redux-logger'
-import thunkMiddleware from 'redux-thunk'
-import {composeWithDevTools} from 'redux-devtools-extension'
-import user from './user'
-import skills from './skill'
+import contracts from './contracts'
 import event from './event'
 import eventType from './eventType'
-import singleEvent from './single-event'
 import listings from './listings'
-import users from './users'
 import providers from './providers'
-import services from './services'
 import quotes from './quotes'
-import contracts from './contracts'
+import services from './services'
+import singleEvent from './single-event'
+import skills from './skill'
+import user from './user'
+import users from './users'
 
-const reducer = combineReducers({
-  user,
-  users,
-  providers,
-  skills,
-  event,
-  eventType,
-  singleEvent,
-  listings,
-  services,
-  quotes,
-  contracts
-})
-const middleware = composeWithDevTools(
-  applyMiddleware(thunkMiddleware, createLogger({collapsed: true}))
-)
-const store = createStore(reducer, middleware)
-
-export default store
 export * from './user'
+export default configureStore({
+  reducer: {
+    user,
+    users,
+    providers,
+    skills,
+    event,
+    eventType,
+    singleEvent,
+    listings,
+    services,
+    quotes,
+    contracts
+  },
+  devTools: process.env.NODE_ENV !== 'production',
+  middleware: getDefaultMiddleware =>
+    getDefaultMiddleware().concat(createLogger({collapsed: true}))
+})

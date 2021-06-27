@@ -1,32 +1,59 @@
+import {createAsyncThunk, createSlice} from '@reduxjs/toolkit'
 import axios from 'axios'
+import status from './statusUtils'
 
-const SET_LISTINGS = 'SET_LISTINGS'
-
-const setListings = fetchedListings => ({type: SET_LISTINGS, fetchedListings})
-
-export const fetchListings = () => async dispatch => {
-  try {
-    const {data} = await axios.get('/api/listings')
-    dispatch(setListings(data))
-  } catch (err) {
-    console.log(err)
-  }
-}
-
-export const fetchListing = listingId => async dispatch => {
-  try {
+export const fetchListing = createAsyncThunk(
+  'listing/fetchListing',
+  async listingId => {
     const {data} = await axios.get(`/api/listings/${listingId}`)
-    dispatch(setListings(data))
-  } catch (err) {
-    console.log(err)
+    return data
   }
+)
+
+export const fetchListings = createAsyncThunk(
+  'listings/fetchListings',
+  async () => {
+    const {data} = await axios.get(`/api/listings`)
+    return data
+  }
+)
+
+const initialState = {
+  listings: [],
+  listing: {},
+  status: 'idle',
+  singleStatus: 'idle',
+  error: null
 }
 
-export default function listings(state = [], action) {
-  switch (action.type) {
-    case SET_LISTINGS:
-      return action.fetchedListings
-    default:
-      return state
+const listingsSlice = createSlice({
+  name: 'listings',
+  initialState,
+  reducers: {},
+  extraReducers: {
+    [fetchListings.pending]: state => {
+      state.status = status.loading
+    },
+    [fetchListings.fulfilled]: (state, action) => {
+      state.status = status.succeeded
+      state.listings = state.listings.concat(action.payload)
+    },
+    [fetchListings.rejected]: (state, action) => {
+      state.status = status.failed
+      state.error = action.error.message
+    },
+    [fetchListing.pending]: state => {
+      state.singleStatus = status.loading
+    },
+    [fetchListing.fulfilled]: (state, action) => {
+      state.singleStatus = status.succeeded
+      state.listing = action.payload
+    },
+    [fetchListing.rejected]: (state, action) => {
+      state.singleStatus = status.failed
+      state.error = action.error.message
+    }
   }
-}
+})
+
+export default listingsSlice.reducer
