@@ -1,13 +1,12 @@
 import {configureStore} from '@reduxjs/toolkit'
 import {createLogger} from 'redux-logger'
 import contracts from './contracts'
-import event from './event'
+import events from './events'
 import eventTypes from './eventTypes'
 import listings from './listings'
 import providers from './providers'
 import quotes from './quotes'
 import services from './services'
-import singleEvent from './single-event'
 import skills from './skill'
 import user from './user'
 import users from './users'
@@ -19,9 +18,8 @@ export default configureStore({
     users,
     providers,
     skills,
-    event,
+    events,
     eventTypes,
-    singleEvent,
     listings,
     services,
     quotes,

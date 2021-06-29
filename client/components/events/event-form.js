@@ -4,7 +4,7 @@ import Container from 'react-bootstrap/Container'
 import Form from 'react-bootstrap/Form'
 import {connect} from 'react-redux'
 import {withRouter} from 'react-router'
-import {createEvent} from '../../store/event'
+import {createEvent} from '../../store/events'
 import {fetchEventTypes} from '../../store/eventTypes'
 import {fetchSkills} from '../../store/skill'
 class EventForm extends React.Component {
@@ -102,7 +102,8 @@ const mapState = state => ({
 const mapDispatch = (dispatch, ownProps) => ({
   fetchSkills: () => dispatch(fetchSkills()),
   fetchEventTypes: () => dispatch(fetchEventTypes()),
-  createEvent: event => dispatch(createEvent(event, ownProps.history))
+  createEvent: event =>
+    dispatch(createEvent({event, history: ownProps.history}))
 })
 
 export default withRouter(connect(mapState, mapDispatch)(EventForm))
