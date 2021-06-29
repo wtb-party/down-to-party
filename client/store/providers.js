@@ -64,7 +64,7 @@ const providersSlice = createSlice({
       state.error = action.error.message
     },
     [fetchProvider.pending]: state => {
-      state.singlStatus = status.loading
+      state.singleStatus = status.loading
     },
     [fetchProvider.fulfilled]: (state, action) => {
       state.singleStatus = status.succeeded

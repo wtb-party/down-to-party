@@ -19,7 +19,7 @@ const servicesSlice = createSlice({
   reducers: {},
   extraReducers: {
     [fetchServices.pending]: state => {
-      state.status = status.succeeded
+      state.status = status.loading
     },
     [fetchServices.fulfilled]: (state, action) => {
       state.status = status.succeeded
