@@ -7,7 +7,6 @@ import Card from 'react-bootstrap/Card'
 import Row from 'react-bootstrap/Row'
 import Col from 'react-bootstrap/Col'
 import Button from 'react-bootstrap/Button'
-import {getCurrentUser} from '../store/user'
 import moment from 'moment'
 
 export class UserHome extends React.Component {
@@ -15,9 +14,7 @@ export class UserHome extends React.Component {
     super(props)
     this.handleEventStaff = this.handleEventStaff.bind(this)
   }
-  componentDidMount() {
-    this.props.getCurrentUser(this.props.user.id)
-  }
+
   handleEventStaff(e, userId) {
     const {skills} = this.props.user
     let eventSkill
@@ -37,7 +34,7 @@ export class UserHome extends React.Component {
   }
 
   render() {
-    const {user: {email, location, id, skills, events}, event} = this.props
+    const {user: {email, id, events}} = this.props
 
     return (
       <Container>
@@ -79,8 +76,8 @@ export class UserHome extends React.Component {
           <Col xs={12} sm={6}>
             <h3>Events you're hosting</h3>
             {events && events.length ? (
-              events.map((event, idx) => (
-                <Card key={idx} style={{marginBottom: 10}}>
+              events.map(event => (
+                <Card key={event.id} style={{marginBottom: 10}}>
                   <Card.Body>
                     <Card.Title>
                       {event && event.eventType ? event.eventType.name : ''}
@@ -111,18 +108,12 @@ export class UserHome extends React.Component {
 
 const mapState = state => {
   return {
-    user: state.user,
+    user: state.user.user,
     event: state.event
   }
 }
 
-const mapDispatch = dispatch => {
-  return {
-    getCurrentUser: userId => dispatch(getCurrentUser(userId))
-  }
-}
-
-export default connect(mapState, mapDispatch)(UserHome)
+export default connect(mapState, null)(UserHome)
 
 UserHome.propTypes = {
   email: PropTypes.string

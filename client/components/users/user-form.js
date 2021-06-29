@@ -19,7 +19,7 @@ import Toggles from '../util/toggles'
 
 export default function UserForm({history}) {
   const dispatch = useDispatch()
-  const user = useSelector(state => state.user)
+  const user = useSelector(state => state.user.user)
   const skills = useSelector(state => state.skills.skills)
   const skillStatus = useSelector(state => state.skills.status)
   const providers = useSelector(state => state.providers)
@@ -81,15 +81,7 @@ export default function UserForm({history}) {
     if (inputs.photoURL === '') inputs.photoURL = user.photoURL
     if (inputs.location === '') inputs.location = user.location
 
-    dispatch(
-      updateUser(
-        {
-          ...inputs
-        },
-        user.id
-      )
-    )
-
+    dispatch(updateUser({...inputs, id: user.id}))
     history.push(`/users/${user.id}/profile`)
   }
 
