@@ -13,7 +13,7 @@ export default function CancelContract({
   const dispatch = useDispatch()
 
   const handleCancelContract = () => {
-    dispatch(updateQuoteStatus(quoteId, 'canceled'))
+    dispatch(updateQuoteStatus({quoteId, quoteStatus: 'canceled'}))
     if (quoteStatus === 'confirmed') {
       dispatch(deleteContract({eventId, quoteId, providerId}))
     }

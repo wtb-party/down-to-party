@@ -54,7 +54,9 @@ export default function CreateContract({
 
         if (response.data.success) {
           console.log('CheckoutForm.js 25 | payment successful!')
-          dispatch(updateQuoteStatus(quote.id, 'confirmed'))
+          dispatch(
+            updateQuoteStatus({quoteId: quote.id, quoteStatus: 'confirmed'})
+          )
           dispatch(
             createContract({
               eventId,

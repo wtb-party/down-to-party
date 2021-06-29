@@ -8,11 +8,7 @@ import Tabs from 'react-bootstrap/Tabs'
 import {connect} from 'react-redux'
 import {withRouter} from 'react-router'
 import {destroyEvent, fetchEvent} from '../../store/events'
-import {
-  fetchEventQuotes,
-  requestQuote,
-  updateQuoteStatus
-} from '../../store/quotes'
+import {fetchEventQuotes, requestQuote} from '../../store/quotes'
 import {fetchServices} from '../../store/services'
 import CancelContract from '../contracts/cancelContract'
 import CreateContract from '../contracts/createContract'
@@ -218,7 +214,7 @@ const mapState = state => ({
   singleEvent: state.events.event,
   eventType: state.events.event.eventType,
   services: state.services.services,
-  quotes: state.quotes
+  quotes: state.quotes.quotes
 })
 
 const mapDispatch = (dispatch, ownProps) => ({
@@ -226,9 +222,7 @@ const mapDispatch = (dispatch, ownProps) => ({
   destroyEvent: id => dispatch(destroyEvent({id, history: ownProps.history})),
   fetchServices: eventListings => dispatch(fetchServices(eventListings)),
   requestQuote: quoteBody => dispatch(requestQuote(quoteBody)),
-  fetchEventQuotes: eventId => dispatch(fetchEventQuotes(eventId)),
-  updateQuoteStatus: (quoteId, status) =>
-    dispatch(updateQuoteStatus(quoteId, status))
+  fetchEventQuotes: eventId => dispatch(fetchEventQuotes(eventId))
 })
 
 export default withRouter(connect(mapState, mapDispatch)(SingleEvent))

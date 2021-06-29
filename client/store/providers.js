@@ -26,8 +26,6 @@ export const createProvider = createAsyncThunk(
     const {data} = await axios.post('/api/providers/new-stripe-provider', {
       userId
     })
-
-    console.log('DATA', data)
     return data
   }
 )

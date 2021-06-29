@@ -7,7 +7,7 @@ import Container from 'react-bootstrap/Container'
 export default function Provider({match}) {
   const dispatch = useDispatch()
   const provider = useSelector(state => state.providers.provider)
-  const user = useSelector(state => state.user)
+  const user = useSelector(state => state.user.user)
 
   useEffect(() => {
     dispatch(fetchProvider(match.params.providerId))

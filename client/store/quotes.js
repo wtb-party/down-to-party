@@ -1,60 +1,99 @@
+import {createAsyncThunk, createSlice} from '@reduxjs/toolkit'
 import axios from 'axios'
+import status from './statusUtils'
 
-const SET_QUOTES = 'SET_QUOTES'
-const ADD_QUOTE = 'ADD_QUOTE'
-const UPDATE_QUOTE_STATUS = 'UPDATE_QUOTE_STATUS'
-
-const setQuotes = quotes => ({
-  type: SET_QUOTES,
-  quotes
-})
-
-const addQuote = quote => ({
-  type: ADD_QUOTE,
-  quote
-})
-
-const updateQuote = quote => ({
-  type: UPDATE_QUOTE_STATUS,
-  quote
-})
-
-export const fetchEventQuotes = eventId => async dispatch => {
-  const {data} = await axios.get(`/api/quotes/eventQuotes/?id=${eventId}`)
-  dispatch(setQuotes(data))
-}
-
-export const fetchProviderQuotes = providerId => async dispatch => {
-  const {data} = await axios.get(`/api/quotes/providerQuotes/?id=${providerId}`)
-  dispatch(setQuotes(data))
-}
-
-export const updateQuoteStatus = (quoteId, status) => async dispatch => {
-  const {data} = await axios.put(`/api/quotes/${quoteId}`, {status})
-  dispatch(updateQuote(data))
-}
-
-export const requestQuote = quoteBody => async dispatch => {
-  const {data} = await axios.post('/api/quotes/new', quoteBody)
-  dispatch(addQuote(data))
-}
-
-export default (state = [], action) => {
-  switch (action.type) {
-    case SET_QUOTES:
-      return action.quotes
-    case ADD_QUOTE:
-      return [...state, action.quote]
-    case UPDATE_QUOTE_STATUS:
-      return [
-        ...state.map(quote => {
-          if (quote.id === action.quote.id) {
-            quote.status = action.quote.status
-          }
-          return quote
-        })
-      ]
-    default:
-      return state
+export const fetchEventQuotes = createAsyncThunk(
+  'quotes/fetchEventQuotes',
+  async eventId => {
+    const {data} = await axios.get(`/api/quotes/eventQuotes/?id=${eventId}`)
+    return data
   }
-}
+)
+
+export const fetchProviderQuotes = createAsyncThunk(
+  'quotes/fetchProviderQuotes',
+  async providerId => {
+    const {data} = await axios.get(
+      `/api/quotes/providerQuotes/?id=${providerId}`
+    )
+    return data
+  }
+)
+
+export const updateQuoteStatus = createAsyncThunk(
+  'quotes/updateQuoteStatus',
+  async quoteObj => {
+    const {quoteId, quoteStatus} = quoteObj
+    const {data} = await axios.put(`/api/quotes/${quoteId}`, {
+      status: quoteStatus
+    })
+    return data
+  }
+)
+
+export const requestQuote = createAsyncThunk(
+  'quotes/requestQuote',
+  async quoteBody => {
+    const {data} = await axios.post('/api/quotes/new', quoteBody)
+    return data
+  }
+)
+
+const quotesSlice = createSlice({
+  name: 'quotes',
+  initialState: {quotes: [], status: 'idle', error: null},
+  reducers: {},
+  extraReducers: {
+    [fetchEventQuotes.pending]: state => {
+      state.status = status.loading
+    },
+    [fetchEventQuotes.fulfilled]: (state, action) => {
+      state.status = status.succeeded
+      state.quotes = action.payload
+    },
+    [fetchEventQuotes.rejected]: (state, action) => {
+      state.status = status.failed
+      state.error = action.error.message
+    },
+    [fetchProviderQuotes.pending]: state => {
+      state.status = status.loading
+    },
+    [fetchProviderQuotes.fulfilled]: (state, action) => {
+      state.status = status.succeeded
+      state.quotes = action.payload
+    },
+    [fetchProviderQuotes.rejected]: (state, action) => {
+      state.status = status.failed
+      state.error = action.error.message
+    },
+    [updateQuoteStatus.pending]: state => {
+      state.status = status.loading
+    },
+    [updateQuoteStatus.fulfilled]: (state, action) => {
+      state.status = status.succeeded
+      state.quotes = state.quotes.map(quote => {
+        if (quote.id === action.payload.id) {
+          quote.status = action.payload.status
+        }
+        return quote
+      })
+    },
+    [updateQuoteStatus.rejected]: (state, action) => {
+      state.status = status.failed
+      state.error = action.error.message
+    },
+    [requestQuote.pending]: state => {
+      state.status = status.loading
+    },
+    [requestQuote.fulfilled]: (state, action) => {
+      state.status = status.succeeded
+      state.quotes = state.quotes.push(action.payload)
+    },
+    [requestQuote.rejected]: (state, action) => {
+      state.status = status.failed
+      state.error = action.error.message
+    }
+  }
+})
+
+export default quotesSlice.reducer
