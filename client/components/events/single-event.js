@@ -218,7 +218,7 @@ class SingleEvent extends React.Component {
 const mapState = state => ({
   singleEvent: state.singleEvent,
   eventType: state.singleEvent.eventType,
-  services: state.services,
+  services: state.services.services,
   quotes: state.quotes
 })
 
