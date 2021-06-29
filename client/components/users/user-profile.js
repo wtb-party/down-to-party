@@ -8,8 +8,7 @@ import Image from 'react-bootstrap/Image'
 import Button from 'react-bootstrap/Button'
 
 export default function UserProfile() {
-  const {id, email, photoURL, location} = useSelector(state => state.user)
-
+  const {id, email, photoURL, location} = useSelector(state => state.user.user)
   return (
     <Container>
       <h1 className="text-center">Your profile</h1>

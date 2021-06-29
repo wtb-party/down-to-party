@@ -1,5 +1,5 @@
 const router = require('express').Router()
-const {User, Provider, Skill, Event, EventType} = require('../db/models')
+const {User, Provider, Event, EventType} = require('../db/models')
 module.exports = router
 
 router.get('/:id/profile', async (req, res, next) => {
@@ -15,9 +15,8 @@ router.get('/:id/profile', async (req, res, next) => {
 
 router.put('/:id/profile', async (req, res, next) => {
   try {
-    delete req.body.userId
     const user = await User.findByPk(req.params.id, {
-      include: [{model: Event, include: {model: EventType}}]
+      include: [{model: Provider}, {model: Event, include: {model: EventType}}]
     })
     if (user) {
       const updatedUser = await user.update(req.body, {

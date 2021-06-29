@@ -92,7 +92,7 @@ class EventForm extends React.Component {
 }
 
 const mapState = state => ({
-  userId: state.user.id,
+  userId: state.user.user.id,
   skills: state.skills.skills,
   eventTypes: state.eventTypes.eventTypes,
   skillStatus: state.skills.status,
