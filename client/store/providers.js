@@ -1,69 +1,104 @@
 import axios from 'axios'
 import queryString from 'query-string'
+import {createAsyncThunk, createSlice} from '@reduxjs/toolkit'
+import status from './statusUtils'
 
-const SET_PROVIDERS = 'SET_PROVIDERS'
-const SET_PROVIDER = 'SET_PROVIDER'
-const ADD_PROVIDER = 'ADD_PROVIDER'
-
-const setProviders = fetchedProviders => ({
-  type: SET_PROVIDERS,
-  fetchedProviders
-})
-
-const setProvider = provider => ({
-  type: SET_PROVIDER,
-  provider
-})
-
-const addProvider = provider => ({
-  type: ADD_PROVIDER,
-  provider
-})
-
-export const fetchProviders = filterOptions => async dispatch => {
-  const params = queryString.parse(filterOptions)
-  try {
+export const fetchProviders = createAsyncThunk(
+  'providers/fetchProviders',
+  async filterOptions => {
+    const params = queryString.parse(filterOptions)
     const {data} = await axios.get('/api/providers', {params})
-    dispatch(setProviders(data))
-  } catch (err) {
-    console.log(err)
+    return data
   }
+)
+
+export const fetchProvider = createAsyncThunk(
+  'providers/fetchProvider',
+  async id => {
+    const {data} = await axios.get(`/api/providers/${id}`)
+    return data
+  }
+)
+
+export const createProvider = createAsyncThunk(
+  'providers/createProvider',
+  async userId => {
+    const {data} = await axios.post('/api/providers/new-stripe-provider', {
+      userId
+    })
+
+    console.log('DATA', data)
+    return data
+  }
+)
+
+export const updateProvider = createAsyncThunk(
+  'providers/updateProvider',
+  async updateObj => {
+    const {skillIds, providerId} = updateObj
+    const {data} = await axios.put(`/api/providers/${providerId}`, skillIds)
+    return data
+  }
+)
+
+const initialState = {
+  providers: [],
+  provider: {},
+  url: '',
+  status: 'idle',
+  singleStatus: 'idle',
+  error: null
 }
 
-export const fetchProvider = providerId => async dispatch => {
-  try {
-    const {data} = await axios.get(`/api/providers/${providerId}`)
-    dispatch(setProvider(data))
-  } catch (err) {
-    console.log(err)
+const providersSlice = createSlice({
+  name: 'providers',
+  initialState,
+  extraReducers: {
+    [fetchProviders.pending]: state => {
+      state.status = status.loading
+    },
+    [fetchProviders.fulfilled]: (state, action) => {
+      state.status = status.succeeded
+      state.providers = action.payload
+    },
+    [fetchProviders.rejected]: (state, action) => {
+      state.status = status.failed
+      state.error = action.error.message
+    },
+    [fetchProvider.pending]: state => {
+      state.singlStatus = status.loading
+    },
+    [fetchProvider.fulfilled]: (state, action) => {
+      state.singleStatus = status.succeeded
+      state.provider = action.payload
+    },
+    [fetchProvider.rejected]: (state, action) => {
+      state.singleStatus = status.failed
+      state.error = action.error.message
+    },
+    [createProvider.pending]: state => {
+      state.status = status.loading
+    },
+    [createProvider.fulfilled]: (state, action) => {
+      state.status = status.succeeded
+      state.url = action.payload.url
+    },
+    [createProvider.rejected]: (state, action) => {
+      state.status = status.failed
+      state.error = action.error.message
+    },
+    [updateProvider.pending]: state => {
+      state.singleStatus = status.loading
+    },
+    [updateProvider.fulfilled]: (state, action) => {
+      state.singleStatus = status.succeeded
+      state.provider = action.payload
+    },
+    [updateProvider.rejected]: (state, action) => {
+      state.singleStatus = status.failed
+      state.error = action.error.message
+    }
   }
-}
+})
 
-export const createProvider = userId => async dispatch => {
-  const {data} = await axios.post('/api/providers/new-stripe-provider', {
-    userId
-  })
-  dispatch(addProvider(data))
-}
-
-export const updateProvider = (edits, providerId) => async dispatch => {
-  try {
-    const {data} = await axios.put(`/api/providers/${providerId}`, edits)
-    dispatch(setProvider(data))
-  } catch (err) {
-    console.error(err)
-  }
-}
-
-export default function providers(state = [], action) {
-  switch (action.type) {
-    case SET_PROVIDERS:
-      return action.fetchedProviders
-    case SET_PROVIDER:
-      return action.provider
-    case ADD_PROVIDER:
-      return [...state, action.provider]
-    default:
-      return state
-  }
-}
+export default providersSlice.reducer

@@ -15,7 +15,7 @@ import {fetchSkills} from '../../store/skill'
 
 export default function Providers({history, location}) {
   const dispatch = useDispatch()
-  const providers = useSelector(state => state.providers)
+  const providers = useSelector(state => state.providers.providers)
   const skills = useSelector(state => state.skills.skills)
   const skillStatus = useSelector(state => state.skills.status)
   const [locationInput, setLocationInput] = useState('')

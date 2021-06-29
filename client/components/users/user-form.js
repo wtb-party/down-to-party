@@ -1,3 +1,4 @@
+/* eslint-disable complexity */
 import React, {useEffect, useState} from 'react'
 import Button from 'react-bootstrap/Button'
 import Card from 'react-bootstrap/Card'
@@ -52,11 +53,11 @@ export default function UserForm({history}) {
 
   useEffect(
     () => {
-      if (providers && providers[0] && providers[0].url) {
-        window.location.href = providers[0].url
+      if (providers && providers.url) {
+        window.location.href = providers.url
       }
     },
-    [providers[0]]
+    [providers.url]
   )
 
   const handleInput = e => {
@@ -93,7 +94,7 @@ export default function UserForm({history}) {
   const handleProviderUpdate = e => {
     console.log('providerId', user.provider.id)
     e.preventDefault()
-    dispatch(updateProvider(skillIds, user.provider.id))
+    dispatch(updateProvider({skillIds, providerId: user.provider.id}))
   }
 
   return (
