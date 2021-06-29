@@ -1,10 +1,10 @@
 import React, {useEffect} from 'react'
 import {useSelector, useDispatch} from 'react-redux'
-import {fetchEvents} from '../../store/event'
+import {fetchEvents} from '../../store/events'
 
 export default function Events() {
   const dispatch = useDispatch()
-  const allEvents = useSelector(state => state.event)
+  const allEvents = useSelector(state => state.events.events)
 
   useEffect(() => {
     dispatch(fetchEvents())

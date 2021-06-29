@@ -7,14 +7,13 @@ import Tab from 'react-bootstrap/Tab'
 import Tabs from 'react-bootstrap/Tabs'
 import {connect} from 'react-redux'
 import {withRouter} from 'react-router'
-import {destroyEvent} from '../../store/event'
+import {destroyEvent, fetchEvent} from '../../store/events'
 import {
   fetchEventQuotes,
   requestQuote,
   updateQuoteStatus
 } from '../../store/quotes'
 import {fetchServices} from '../../store/services'
-import {fetchSingleEvent} from '../../store/single-event'
 import CancelContract from '../contracts/cancelContract'
 import CreateContract from '../contracts/createContract'
 import ConfirmationModal from '../util/confirmationModal'
@@ -28,7 +27,7 @@ class SingleEvent extends React.Component {
   }
   async componentDidMount() {
     const id = parseInt(this.props.match.params.id, 10)
-    await this.props.fetchSingleEvent(id)
+    await this.props.fetchEvent(id)
     await this.props.fetchEventQuotes(id)
     const listings = this.props.singleEvent.listings
     if (listings && listings.length) {
@@ -216,15 +215,15 @@ class SingleEvent extends React.Component {
 }
 
 const mapState = state => ({
-  singleEvent: state.singleEvent,
-  eventType: state.singleEvent.eventType,
+  singleEvent: state.events.event,
+  eventType: state.events.event.eventType,
   services: state.services.services,
   quotes: state.quotes
 })
 
 const mapDispatch = (dispatch, ownProps) => ({
-  fetchSingleEvent: id => dispatch(fetchSingleEvent(id)),
-  destroyEvent: id => dispatch(destroyEvent(id, ownProps.history)),
+  fetchEvent: id => dispatch(fetchEvent(id)),
+  destroyEvent: id => dispatch(destroyEvent({id, history: ownProps.history})),
   fetchServices: eventListings => dispatch(fetchServices(eventListings)),
   requestQuote: quoteBody => dispatch(requestQuote(quoteBody)),
   fetchEventQuotes: eventId => dispatch(fetchEventQuotes(eventId)),
