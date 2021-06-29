@@ -1,3 +1,4 @@
+/* eslint-disable complexity */
 import React, {useState, useEffect} from 'react'
 import {useSelector, useDispatch} from 'react-redux'
 import {Link} from 'react-router-dom'
@@ -20,8 +21,8 @@ export default function ProviderProfile({
   let quotes
   const dispatch = useDispatch()
   if (isAuthenticatedProvider) {
-    const {id: providerId} = useSelector(state => state.providers)
-    quotes = useSelector(state => state.quotes)
+    const {id: providerId} = useSelector(state => state.providers.provider)
+    quotes = useSelector(state => state.quotes.quotes)
     useEffect(() => {
       dispatch(fetchProviderQuotes(providerId))
     }, [])
@@ -113,12 +114,14 @@ export default function ProviderProfile({
               {quote &&
                 quote.listing &&
                 quote.listing.event &&
+                quote.listing.event.eventType &&
                 quote.listing.event.eventType.name}
               <span className="gray-small">
                 {' '}
                 {`for ${quote &&
                   quote.listing &&
                   quote.listing.event &&
+                  quote.listing.event.host &&
                   quote.listing.event.host.email}`}
               </span>
               <span className="float-right gray-small">
@@ -144,7 +147,12 @@ export default function ProviderProfile({
               <Button
                 className="float-right"
                 onClick={() =>
-                  dispatch(updateQuoteStatus(quote.id, 'accepted'))
+                  dispatch(
+                    updateQuoteStatus({
+                      quoteId: quote.id,
+                      quoteStatus: 'accepted'
+                    })
+                  )
                 }
                 variant="success"
               >
@@ -154,7 +162,12 @@ export default function ProviderProfile({
                 style={{marginRight: 5}}
                 className="float-right"
                 onClick={() =>
-                  dispatch(updateQuoteStatus(quote.id, 'rejected'))
+                  dispatch(
+                    updateQuoteStatus({
+                      quoteId: quote.id,
+                      quoteStatus: 'rejected'
+                    })
+                  )
                 }
                 variant="danger"
               >
