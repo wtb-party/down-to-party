@@ -29,7 +29,7 @@ const userSlice = createSlice({
   reducers: {},
   extraReducers: {
     [fetchMe.pending]: state => {
-      state.status = status.pending
+      state.status = status.loading
     },
     [fetchMe.fulfilled]: (state, action) => {
       state.status = status.succeeded
@@ -40,7 +40,7 @@ const userSlice = createSlice({
       state.error = action.error.message
     },
     [updateUser.pending]: state => {
-      state.status = status.pending
+      state.status = status.loading
     },
     [updateUser.fulfilled]: (state, action) => {
       state.status = status.succeeded
@@ -51,7 +51,7 @@ const userSlice = createSlice({
       state.error = action.error.message
     },
     [logout.pending]: state => {
-      state.status = status.pending
+      state.status = status.loading
     },
     [logout.fulfilled]: (state, action) => {
       state.status = status.succeeded
