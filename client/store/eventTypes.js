@@ -20,7 +20,7 @@ const eventTypesSlice = createSlice({
     },
     [fetchEventTypes.fulfilled]: (state, action) => {
       state.status = status.succeeded
-      state.eventTypes = state.eventTypes.concat(action.payload)
+      state.eventTypes = action.payload
     },
     [fetchEventTypes.rejected]: (state, action) => {
       state.status = status.failed

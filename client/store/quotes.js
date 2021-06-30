@@ -71,7 +71,7 @@ const quotesSlice = createSlice({
     },
     [updateQuoteStatus.fulfilled]: (state, action) => {
       state.status = status.succeeded
-      state.quotes = state.quotes.map(quote => {
+      state.quotes.map(quote => {
         if (quote.id === action.payload.id) {
           quote.status = action.payload.status
         }
@@ -87,7 +87,7 @@ const quotesSlice = createSlice({
     },
     [requestQuote.fulfilled]: (state, action) => {
       state.status = status.succeeded
-      state.quotes = state.quotes.push(action.payload)
+      state.quotes.push(action.payload)
     },
     [requestQuote.rejected]: (state, action) => {
       state.status = status.failed

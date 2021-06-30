@@ -36,7 +36,7 @@ const listingsSlice = createSlice({
     },
     [fetchListings.fulfilled]: (state, action) => {
       state.status = status.succeeded
-      state.listings = state.listings.concat(action.payload)
+      state.listings = action.payload
     },
     [fetchListings.rejected]: (state, action) => {
       state.status = status.failed

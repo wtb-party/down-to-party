@@ -17,7 +17,7 @@ const skillsSlice = createSlice({
     },
     [fetchSkills.fulfilled]: (state, action) => {
       state.status = status.succeeded
-      state.skills = state.skills.concat(action.payload)
+      state.skills = action.payload
     },
     [fetchSkills.rejected]: (state, action) => {
       state.status = status.failed
