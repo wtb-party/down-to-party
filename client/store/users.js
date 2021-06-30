@@ -1,26 +1,29 @@
+import {createAsyncThunk, createSlice} from '@reduxjs/toolkit'
 import axios from 'axios'
+import status from './statusUtils'
 
-const SET_USERS = 'SET_USERS'
-
-const setUsers = users => ({
-  type: SET_USERS,
-  users
+const fetchUsers = createAsyncThunk('users/fetchUsers', async () => {
+  const {data} = await axios.get('/api/users')
+  return data
 })
 
-export const fetchUsers = () => async dispatch => {
-  try {
-    const {data} = await axios.get('/api/users')
-    dispatch(setUsers(data))
-  } catch (err) {
-    console.error(err)
+const usersSlice = createSlice({
+  name: 'users',
+  initialState: {users: [], status: 'idle', error: null},
+  reducers: {},
+  extraReducers: {
+    [fetchUsers.pending]: state => {
+      state.status = status.loading
+    },
+    [fetchUsers.fulfilled]: (state, action) => {
+      state.status = status.succeeded
+      state.users = action.payload
+    },
+    [fetchUsers.rejected]: (state, action) => {
+      state.status = status.failed
+      state.error = action.error.message
+    }
   }
-}
+})
 
-export default (state = [], action) => {
-  switch (action.type) {
-    case SET_USERS:
-      return action.users
-    default:
-      return state
-  }
-}
+export default usersSlice.reducer
