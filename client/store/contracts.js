@@ -1,65 +1,76 @@
+import {createAsyncThunk, createSlice} from '@reduxjs/toolkit'
 import axios from 'axios'
+import status from './statusUtils'
 
-const SET_CONTRACTS = 'SET_CONTRACTS'
-const ADD_CONTRACT = 'ADD_CONTRACT'
-const REMOVE_CONTRACT = 'REMOVE_CONTRACT'
-
-const setContracts = contracts => ({
-  type: SET_CONTRACTS,
-  contracts
-})
-
-const addContract = newContract => ({
-  type: ADD_CONTRACT,
-  newContract
-})
-
-const removeContract = params => ({
-  type: REMOVE_CONTRACT,
-  params
-})
-
-export const fetchContracts = () => async dispatch => {
-  try {
+export const fetchContracts = createAsyncThunk(
+  'contracts/fetchContracts',
+  async () => {
     const {data} = await axios.get('/api/contracts')
-    dispatch(setContracts(data))
-  } catch (err) {
-    console.error(err)
+    return data
   }
-}
+)
 
-export const createContract = newContract => async dispatch => {
-  try {
-    const {data} = await axios.post('/api/contracts', newContract)
-    dispatch(addContract(data))
-  } catch (err) {
-    console.error(err)
+export const createContract = createAsyncThunk(
+  'contracts/createContract',
+  async contract => {
+    const {data} = await axios.post('/api/contracts', contract)
+    return data
   }
-}
+)
 
-export const deleteContract = params => async dispatch => {
-  try {
+export const destroyContract = createAsyncThunk(
+  'contracts/destroyContract',
+  async params => {
     await axios.delete('/api/contracts', params)
-    dispatch(removeContract(params))
-  } catch (err) {
-    console.error(err)
+    return params
   }
-}
+)
 
-export default (state = [], action) => {
-  switch (action.type) {
-    case SET_CONTRACTS:
-      return action.contracts
-    case ADD_CONTRACT:
-      return [...state, action.newContract]
-    case REMOVE_CONTRACT:
-      return state.filter(
+const contractsSlice = createSlice({
+  name: 'contracts',
+  initialState: {contracts: [], status: 'idle', error: null},
+  reducers: {},
+  extraReducers: {
+    [fetchContracts.pending]: state => {
+      state.status = status.loading
+    },
+    [fetchContracts.fulfilled]: (state, action) => {
+      state.status = status.succeeded
+      state.listings = action.payload
+    },
+    [fetchContracts.rejected]: (state, action) => {
+      state.status = status.failed
+      state.error = action.error.message
+    },
+    [createContract.pending]: state => {
+      state.status = status.loading
+    },
+    [createContract.fulfilled]: (state, action) => {
+      state.status = status.succeeded
+      state.contracts.push(action.payload)
+    },
+    [createContract.rejected]: (state, action) => {
+      state.status = status.failed
+      state.error = action.error.message
+    },
+    [destroyContract.pending]: state => {
+      state.status = status.loading
+    },
+    [destroyContract.fulfilled]: (state, action) => {
+      const {eventId, quoteId, providerId} = action.payload
+      state.status = status.succeeded
+      state.contracts.filter(
         contract =>
-          contract.eventId !== action.params.eventId &&
-          contract.quoteId !== action.params.quoteId &&
-          contract.providerId !== action.params.providerId
+          contract.eventId !== eventId &&
+          contract.quoteId !== quoteId &&
+          contract.providerId !== providerId
       )
-    default:
-      return state
+    },
+    [destroyContract.rejected]: (state, action) => {
+      state.status = status.failed
+      state.error = action.error.message
+    }
   }
-}
+})
+
+export default contractsSlice.reducer

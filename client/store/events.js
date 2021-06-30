@@ -17,7 +17,8 @@ export const createEvent = createAsyncThunk(
   async eventObj => {
     const {event, history} = eventObj
     const {data} = await axios.post('/api/events', event)
-    return data && history.push(`/events/${data.id}`)
+    history.push(`/events/${data.id}`)
+    return data
   }
 )
 
@@ -25,8 +26,9 @@ export const destroyEvent = createAsyncThunk(
   'events/destroyEvent',
   async idObj => {
     const {id, history} = idObj
+    history.push('/home')
     const {data} = await axios.delete(`/api/events/${id}`)
-    return data && history.push('/home')
+    return data
   }
 )
 
@@ -70,7 +72,7 @@ const eventsSlice = createSlice({
     },
     [createEvent.fulfilled]: (state, action) => {
       state.status = status.succeeded
-      state.events = state.events.push(action.payload)
+      state.events.push(action.payload)
     },
     [createEvent.rejected]: (state, action) => {
       state.status = status.failed
@@ -81,7 +83,7 @@ const eventsSlice = createSlice({
     },
     [destroyEvent.fulfilled]: (state, action) => {
       state.status = status.succeeded
-      state.events = state.events.filter(({id}) => id !== action.id)
+      state.events.filter(({id}) => id !== action.id)
     },
     [destroyEvent.rejected]: (state, action) => {
       state.status = status.failed
