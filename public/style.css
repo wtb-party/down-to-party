@@ -18,6 +18,15 @@ nav a {
   margin: 1em;
 }
 
+#nav a {
+  margin-top: 2px;
+  margin-bottom: 2px;
+}
+
+.navbar .navbar-toggler {
+  border-color: transparent;
+}
+
 .app-container {
   margin-top: 50px;
 }
