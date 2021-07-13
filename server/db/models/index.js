@@ -7,14 +7,6 @@ const Listing = require('./listing')
 const Skill = require('./skill')
 const Service = require('./service')
 const Quote = require('./quote')
-const Sequelize = require('sequelize')
-const db = require('../db')
-
-const EventStaff = db.define('event_staff', {
-  skillId: {
-    type: Sequelize.INTEGER
-  }
-})
 
 // User & Event for "Hosting"
 User.hasMany(Event)
@@ -29,7 +21,6 @@ Skill.hasMany(Listing)
 Listing.belongsTo(Skill, {as: 'role', foreignKey: 'skillId'})
 
 Event.belongsTo(EventType)
-EventType.belongsToMany(Event, {through: 'event_type'})
 
 Quote.hasOne(Contract)
 Contract.belongsTo(Quote)
@@ -69,7 +60,6 @@ module.exports = {
   Listing,
   Skill,
   Service,
-  EventStaff,
   EventType,
   Quote
 }
