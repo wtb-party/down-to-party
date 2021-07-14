@@ -3,17 +3,17 @@ const db = require('../db')
 
 const Listing = db.define('listing', {
   id: {
-    type: Sequelize.INTEGER,
-    primaryKey: true,
-    autoIncrement: true,
-    allowNull: false
+    type: Sequelize.UUID,
+    defaultValue: Sequelize.UUIDV4,
+    allowNull: false,
+    primaryKey: true
   },
   eventId: {
-    type: Sequelize.INTEGER,
+    type: Sequelize.UUID,
     allowNull: false
   },
   skillId: {
-    type: Sequelize.INTEGER,
+    type: Sequelize.UUID,
     allowNull: false
   },
   positionsAvailable: {

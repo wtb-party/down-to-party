@@ -22,7 +22,7 @@ class SingleEvent extends React.Component {
     this.quoteListingMapper = this.quoteListingMapper.bind(this)
   }
   async componentDidMount() {
-    const id = parseInt(this.props.match.params.id, 10)
+    const id = this.props.match.params.id
     await this.props.fetchEvent(id)
     await this.props.fetchEventQuotes(id)
     const listings = this.props.singleEvent.listings

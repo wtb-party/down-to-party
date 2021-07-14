@@ -68,7 +68,7 @@ export default function UserForm({history}) {
   }
 
   const handleSwitch = e => {
-    const id = parseInt(e.target.id, 10)
+    const id = e.target.id
     if (skillIds.includes(id)) {
       setSkillIds(skillIds.filter(skillId => skillId !== id))
     } else {

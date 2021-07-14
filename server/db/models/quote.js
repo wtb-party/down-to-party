@@ -3,20 +3,21 @@ const db = require('../db')
 
 const Quote = db.define('quote', {
   id: {
-    type: Sequelize.INTEGER,
-    primaryKey: true,
-    autoIncrement: true
+    type: Sequelize.UUID,
+    defaultValue: Sequelize.UUIDV4,
+    allowNull: false,
+    primaryKey: true
   },
   listingId: {
-    type: Sequelize.INTEGER,
+    type: Sequelize.UUID,
     allowNull: false
   },
   providerId: {
-    type: Sequelize.INTEGER,
+    type: Sequelize.UUID,
     allowNull: false
   },
   serviceId: {
-    type: Sequelize.INTEGER,
+    type: Sequelize.UUID,
     allowNull: false
   },
   duration: {

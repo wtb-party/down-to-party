@@ -5,17 +5,17 @@ const Service = db.define(
   'service',
   {
     id: {
-      type: Sequelize.INTEGER,
-      primaryKey: true,
-      autoIncrement: true,
-      allowNull: false
+      type: Sequelize.UUID,
+      defaultValue: Sequelize.UUIDV4,
+      allowNull: false,
+      primaryKey: true
     },
     providerId: {
-      type: Sequelize.INTEGER,
+      type: Sequelize.UUID,
       allowNull: false
     },
     skillId: {
-      type: Sequelize.INTEGER,
+      type: Sequelize.UUID,
       allowNull: false
     },
     rate1: {

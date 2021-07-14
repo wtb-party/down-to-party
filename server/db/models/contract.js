@@ -3,21 +3,21 @@ const db = require('../db')
 
 const Contract = db.define('contract', {
   id: {
-    type: Sequelize.INTEGER,
-    primaryKey: true,
-    autoIncrement: true,
-    allowNull: false
+    type: Sequelize.UUID,
+    defaultValue: Sequelize.UUIDV4,
+    allowNull: false,
+    primaryKey: true
   },
   eventId: {
-    type: Sequelize.INTEGER,
+    type: Sequelize.UUID,
     allowNull: false
   },
   quoteId: {
-    type: Sequelize.INTEGER,
+    type: Sequelize.UUID,
     allowNull: false
   },
   providerId: {
-    type: Sequelize.INTEGER,
+    type: Sequelize.UUID,
     allowNull: false
   }
 })

@@ -2,8 +2,14 @@ const Sequelize = require('sequelize')
 const db = require('../db')
 
 const Event = db.define('event', {
+  id: {
+    type: Sequelize.UUID,
+    defaultValue: Sequelize.UUIDV4,
+    allowNull: false,
+    primaryKey: true
+  },
   userId: {
-    type: Sequelize.INTEGER,
+    type: Sequelize.UUID,
     allowNull: false
   },
   location: {
