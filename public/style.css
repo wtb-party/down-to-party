@@ -13,9 +13,14 @@ label {
   display: block;
 }
 
-nav a {
-  display: inline-block;
-  margin: 1em;
+nav .link {
+  margin: 0.5rem;
+}
+
+.nav-image {
+  width: 1.5rem;
+  height: 1.5rem;
+  margin-right: 0.15rem;
 }
 
 #nav a {
